@@ -15,13 +15,9 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       title: 'Flutter Demo',
       home: Scaffold(
-        // This is the big blue bar at the top.
         appBar: AppBar(
-          title: const Text('Magical Image Retriever'),
+          title: const Text('Weltraum VPN'),
         ),
-
-        // This is the app body, including the state provider.
-        // See app.dart to start writing code for the body.
         body: ChangeNotifierProvider(
           create: (context) => MyState(),
           child: const AppBody(),
