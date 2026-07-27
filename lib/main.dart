@@ -1,14 +1,38 @@
 import 'package:flutter/material.dart';
-import 'screens/authorization/login_screen.dart';
-import 'screens/location_screen.dart';
+import 'package:flutter_app/operators/jason_web_token_operator.dart';
+import 'screens/home/home_screen.dart';
 import 'screens/start/start_screen.dart';
+import 'classes/application/application_state.dart';
 
-void main() {
-  runApp(const WeltraumVPN());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
+  // Create global application state
+  final appState = ApplicationState();
+
+  // Create JWT operator
+  final jwtOperator = JasonWebTokenOperator();
+
+  // Try to load JWT and fetch user
+  final bool loggedIn = await jwtOperator.setUpUser(appState);
+
+  runApp(
+    WeltraumVPN(
+      appState: appState,
+      initialRoute: loggedIn ? "/home" : "/",
+    ),
+  );
 }
 
 class WeltraumVPN extends StatelessWidget {
-  const WeltraumVPN({super.key});
+  final ApplicationState appState;
+  final String initialRoute;
+
+  const WeltraumVPN({
+    super.key,
+    required this.appState,
+    required this.initialRoute,
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -19,10 +43,10 @@ class WeltraumVPN extends StatelessWidget {
         fontFamily: "Inter",
         brightness: Brightness.dark,
       ),
+      initialRoute: initialRoute,
       routes: {
-        "/": (context) => const LoginScreen(),
-        "/location": (context) => const LocationScreen(),
-        "/home": (context) => const StartScreen(),
+        "/": (context) => const StartScreen(),
+        "/home": (context) => const HomeScreen(),
       },
     );
   }

@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
-import '../theme/colors.dart';
+import '../../theme/colors.dart';
 
-class LocationScreen extends StatefulWidget {
-  const LocationScreen({super.key});
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({super.key});
 
   @override
-  State<LocationScreen> createState() => _LocationScreenState();
+  State<HomeScreen> createState() => _HomeScreenState();
 }
 
-class _LocationScreenState extends State<LocationScreen> {
+class _HomeScreenState extends State<HomeScreen> {
   String active = "Paris";
 
   @override
