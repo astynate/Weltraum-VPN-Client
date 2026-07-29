@@ -8,23 +8,23 @@ class PurpulTheme extends AbstractTheme {
     
     // -- TO WRITE --
     @override
-    Color get primary500Color => const Color(0x8675B1FF);
+    Color get primary500Color => const Color.fromARGB(255, 134, 117, 177);
       
     @override
-    Color get primary400Color => const Color(0x3C2B6FFF);
+    Color get primary400Color => const Color.fromARGB(255, 60, 43, 111);
       
     @override
-    Color get primary300Color => const Color(0x6446C2FF);
+    Color get primary300Color => const Color.fromARGB(255, 101, 70, 194);
     
     @override
-    Color get primary200Color => const Color(0x4D21BBFF);
+    Color get primary200Color => const Color.fromARGB(255, 77, 33, 187);
     
     @override
-    Color get primary100Color => const Color(0x34177DFF);
+    Color get primary100Color => const Color.fromARGB(255, 52, 23, 125);
       
     @override
-    Color get primary50Color => const Color(0x27115EFF);
+    Color get primary50Color => const Color.fromARGB(255, 39, 17, 94);
     
     @override
-    Color get primary0Color => const Color(0x00000000);
+    Color get primary0Color => const Color.fromARGB(255, 0, 0, 0);
 }

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/operators/jason_web_token_operator.dart';
 import 'screens/home/home_screen.dart';
-import 'screens/start/start_screen.dart';
 import 'classes/application/application_state.dart';
 
 void main() async {
@@ -16,10 +15,16 @@ void main() async {
   // Try to load JWT and fetch user
   final bool loggedIn = await jwtOperator.setUpUser(appState);
 
+  // runApp(
+  //   WeltraumVPN(
+  //     appState: appState,
+  //     initialRoute: loggedIn ? "/home" : "/",
+  //   ),
+  // );
   runApp(
     WeltraumVPN(
       appState: appState,
-      initialRoute: loggedIn ? "/home" : "/",
+      initialRoute: "/home",
     ),
   );
 }
@@ -45,7 +50,7 @@ class WeltraumVPN extends StatelessWidget {
       ),
       initialRoute: initialRoute,
       routes: {
-        "/": (context) => const StartScreen(),
+        // "/": (context) => const StartScreen(),
         "/home": (context) => const HomeScreen(),
       },
     );

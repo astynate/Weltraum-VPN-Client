@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../../theme/colors.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -86,7 +85,7 @@ class LoginScreen extends StatelessWidget {
       child: Container(
         height: 55,
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Color.fromARGB(255, 24, 246, 246),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Row(
@@ -108,7 +107,6 @@ class LoginScreen extends StatelessWidget {
         height: 55,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(12),
-          border: Border.all(color: AppColors.white, width: 1.5),
         ),
         child: Center(
           child: Text(text, style: const TextStyle(fontSize: 18)),

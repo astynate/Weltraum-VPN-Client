@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 
 abstract class AbstractTheme {
+  // Colours
   Color primary600Color = const Color(0xFFFFFFFF);
-  Color primary500Color = const Color(0x8675B1FF);
-  Color primary400Color = const Color(0x3C2B6FFF);
-  Color primary300Color = const Color(0x6446C2FF);
-  Color primary200Color = const Color(0x4D21BBFF);
-  Color primary100Color = const Color(0x34177DFF);
-  Color primary50Color = const Color(0x27115EFF);
+  Color primary500Color = const Color.fromARGB(255, 134, 117, 177);
+  Color primary400Color = const Color(0x003c2b6f);
+  Color primary300Color = const Color(0x006446c2);
+  Color primary200Color = const Color(0x004d21bb);
+  Color primary100Color = const Color(0x0034177d);
+  Color primary50Color = const Color(0x0027115e);
   Color primary0Color = const Color(0x00000000);
+
+  // Anthing Else
+  BorderRadius borderRadius = const BorderRadius.all(Radius.circular(15));
 }

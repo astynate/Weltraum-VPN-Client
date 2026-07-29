@@ -7,11 +7,11 @@ class AccentButtonStyle extends AbstractButtonStyle {
   Color get background => ApplicationState().theme.primary600Color;
 
   @override
-  BorderRadius get borderRadius => throw UnimplementedError();
+  BorderRadius get borderRadius =>  ApplicationState().theme.borderRadius;
 
   @override
-  Color get foreground => throw UnimplementedError();
+  Color get foreground => ApplicationState().theme.primary300Color;
   
   @override
-  Color get accent => throw UnimplementedError();
+  Color get accent => ApplicationState().theme.primary300Color;
 }
