@@ -11,7 +11,7 @@ void main() async {
   final jwtOperator = JasonWebTokenOperator();
   final bool loggedIn = await jwtOperator.setUpUser(state);
 
-  // runApp(
+  // runApp(  
   //   WeltraumVPN(
   //     appState: appState,
   //     initialRoute: loggedIn ? "/home" : "/",
