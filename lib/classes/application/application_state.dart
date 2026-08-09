@@ -34,4 +34,8 @@ class ApplicationState extends ChangeNotifier {
     user = u;
     notifyListeners();
   }
+
+  void setConnection (Connection inputConnection) {
+    connection = inputConnection;
+  }
 }

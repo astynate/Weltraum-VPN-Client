@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/classes/application/application_state.dart';
 import 'package:flutter_app/widgets/buttons/main_buttons/button.dart';
 import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/accent_button_style.dart';
+import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({super.key});
@@ -15,6 +16,10 @@ class _HomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<ApplicationState>();
+
+    print(state.connection.status);
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -31,19 +36,6 @@ class _HomeScreenState extends State<HomeScreen> {
             const SizedBox(height: 40),
             const Spacer(),
 
-            // GestureDetector(
-            //   onTap: () => Navigator.pushNamed(context, "/home"),
-            //   child: Container(
-            //     height: 55,
-            //     decoration: BoxDecoration(
-            //       color: ApplicationState().theme.primary600Color,
-            //       borderRadius: BorderRadius.circular(12),
-            //     ),
-            //     child: const Center(
-            //       child: Text("Connect", style: TextStyle(color: Colors.black, fontSize: 18)),
-            //     ),
-            //   ),
-            // ),
             MainButton(
               label: "Click me",
               onPressed: () {

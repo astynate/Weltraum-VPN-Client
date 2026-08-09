@@ -2,18 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/operators/jason_web_token_operator.dart';
 import 'screens/home/home_screen.dart';
 import 'classes/application/application_state.dart';
+import 'package:provider/provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
-  // Create global application state
-  final appState = ApplicationState();
-
-  // Create JWT operator
+  final state = ApplicationState();
   final jwtOperator = JasonWebTokenOperator();
-
-  // Try to load JWT and fetch user
-  final bool loggedIn = await jwtOperator.setUpUser(appState);
+  final bool loggedIn = await jwtOperator.setUpUser(state);
 
   // runApp(
   //   WeltraumVPN(
@@ -21,10 +17,13 @@ void main() async {
   //     initialRoute: loggedIn ? "/home" : "/",
   //   ),
   // );
-  runApp(
-    WeltraumVPN(
-      appState: appState,
-      initialRoute: "/home",
+runApp(
+  ChangeNotifierProvider<ApplicationState>.value(
+      value: state,
+      child: WeltraumVPN(
+        appState: state,
+        initialRoute: '/home',
+      ),
     ),
   );
 }
