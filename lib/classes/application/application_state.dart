@@ -17,6 +17,10 @@ class ApplicationState extends ChangeNotifier {
     jwt = await storage.read(key: 'jwt');
   }
 
+  ApplicationState() {
+    connection.addListener(notifyListeners);
+  }
+
   Future<void> saveJwt(String token) async {
     jwt = token;
     await storage.write(key: 'jwt', value: token);

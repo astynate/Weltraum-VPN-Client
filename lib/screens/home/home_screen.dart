@@ -23,7 +23,7 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ApplicationState>();
-    final vpnOperator = VirtualPrivateNetworkOperator();
+    final vpnOperator = VirtualPrivateNetworkOperator(state);
 
     return Scaffold(
       body: Container(
@@ -41,13 +41,15 @@ class _HomeScreenState extends State<HomeScreen> {
             const Spacer(),
 
             MainButton(
-              label: "Click me",
+              label: state.connection.status,
               onPressed: () {
-                // if (state.connection.isConnected) {
-                //   vpnOperator.disconnect();
-                // } else {
-                //   vpnOperator.connect();
-                // }
+                if (state.connection.isConnected) {
+                  vpnOperator.disconnect();
+                  state.connection.changeState();
+                } else {
+                  vpnOperator.connect();
+                  state.connection.changeState();
+                }
               },
               buttonStyle: AccentButtonStyle(),
             ),

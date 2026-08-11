@@ -17,15 +17,15 @@ void main() async {
   //     initialRoute: loggedIn ? "/home" : "/",
   //   ),
   // );
-runApp(
-  ChangeNotifierProvider<ApplicationState>.value(
-      value: state,
-      child: WeltraumVPN(
-        appState: state,
-        initialRoute: '/home',
+  runApp(
+    ChangeNotifierProvider<ApplicationState>.value(
+        value: state,
+        child: WeltraumVPN(
+          appState: state,
+          initialRoute: '/home',
+        ),
       ),
-    ),
-  );
+    );
 }
 
 class WeltraumVPN extends StatelessWidget {
