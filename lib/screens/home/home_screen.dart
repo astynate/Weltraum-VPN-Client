@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/classes/application/application_state.dart';
-import 'package:flutter_app/operators/virtual_private_network_operator.dart';
+import 'package:flutter_app/operators/route_operator.dart';
+import 'package:flutter_app/screens/locations/locations_screen.dart';
+import 'package:flutter_app/widgets/button_content/double_text_button_content.dart';
+import 'package:flutter_app/widgets/button_content/text_button_content.dart';
 import 'package:flutter_app/widgets/buttons/main_buttons/button.dart';
 import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/accent_button_style.dart';
+import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/normal_button_style.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -23,12 +27,21 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ApplicationState>();
-    final vpnOperator = VirtualPrivateNetworkOperator(state);
+    // final vpnOperator = VirtualPrivateNetworkOperator(state);
 
     return Scaffold(
       body: Container(
         width: double.infinity,
-        color: ApplicationState().theme.primary300Color,
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topCenter,
+            end: Alignment.bottomCenter,
+            colors: [
+              Color(0xFF7700FF),
+              Color(0xFF34177D),
+            ],
+          ),
+        ),
         padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,22 +54,38 @@ class _HomeScreenState extends State<HomeScreen> {
             const Spacer(),
 
             MainButton(
-              label: state.connection.status,
               onPressed: () {
                 if (state.connection.isConnected) {
-                  vpnOperator.disconnect();
+                  // vpnOperator.disconnect();
                   state.connection.changeState();
                 } else {
-                  vpnOperator.connect();
+                  // vpnOperator.connect();
                   state.connection.changeState();
                 }
               },
-              buttonStyle: AccentButtonStyle(),
+              buttonStyle: AccentButtonStyle(), 
+              buttonContent: TextButtonContent(
+                label: state.connection.isConnected ? "Disconnect" : "Connect", 
+                style: AccentButtonStyle(),
+              ),
             ),
 
+            const SizedBox(height: 10),
+
+            MainButton(
+              onPressed: () {
+                RouteOperator.push(context, const LocationsScreen());
+              },
+              buttonStyle: NormalButtonStyle(), 
+              buttonContent: DoubleTextButtonContent(
+                label: "Lautenbourg, France", 
+                text: "Active", 
+                style: NormalButtonStyle(),
+                icon: 'lib/assets/icons/flags/france.svg',
+              ),
+            ),
+            
             const SizedBox(height: 20),
-            Text("Active: $active", style: const TextStyle(fontSize: 16)),
-            const SizedBox(height: 40),
           ],
         ),
       ),

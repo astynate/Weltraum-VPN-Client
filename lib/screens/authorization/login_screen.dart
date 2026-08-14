@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/operators/google_login_operator.dart';
+import 'package:flutter_app/widgets/button_content/text_button_content.dart';
+import 'package:flutter_app/widgets/buttons/main_buttons/button.dart';
+import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/accent_button_style.dart';
+import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/dark_button_style.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -10,7 +15,7 @@ class LoginScreen extends StatelessWidget {
         width: double.infinity,
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [],
+            colors: [Color(0xFF7700FF), Color(0xFF34177D),],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -19,7 +24,7 @@ class LoginScreen extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            const SizedBox(height: 60),
+            const SizedBox(height: 40),
             GestureDetector(
               onTap: () => Navigator.pop(context),
               child: const Row(
@@ -29,87 +34,101 @@ class LoginScreen extends StatelessWidget {
                 ],
               ),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 80),
 
             const Text(
               "Weltraum VPN",
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 42, fontWeight: FontWeight.w700),
             ),
 
-            const SizedBox(height: 20),
-            const Text("Continue with:", style: TextStyle(fontSize: 18)),
+            const SizedBox(height: 0),
+            const Text("Continue with:", style: TextStyle(fontSize: 24)),
 
             const SizedBox(height: 30),
+            const Spacer(),
 
-            _loginButton(
-              icon: Icons.g_mobiledata,
-              text: "Google Account",
-              onTap: () {
-                Navigator.pushNamed(context, "/location");
+            MainButton(
+              onPressed: () {
+                GoogleLoginOperator googleLoginOperator = GoogleLoginOperator();
+                googleLoginOperator.handleGoogleLogin();
               },
+              buttonStyle: AccentButtonStyle(), 
+              buttonContent: TextButtonContent(
+                label: "Google Account", 
+                icon: 'lib/assets/icons/companies/google.svg', 
+                style: AccentButtonStyle(),
+              ),
+            ),
+
+            const SizedBox(height: 16),
+            MainButton(
+              onPressed: () {
+                
+              },
+              buttonStyle: AccentButtonStyle(), 
+              buttonContent: TextButtonContent(
+                label: "Apple ID", 
+                icon: Icons.apple,
+                style: AccentButtonStyle(),
+              ),
+            ),
+
+            const Spacer(),
+
+            Row(
+              children: [
+                Expanded(
+                  child: Divider(
+                    thickness: 1,
+                    color: Colors.white.withValues(alpha: 0.3),
+                  ),
+                ),
+
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 12),
+                  child: Text(
+                    "OR",
+                    style: TextStyle(fontSize: 16, color: Colors.white.withValues(alpha: 0.5)),
+                  ),
+                ),
+
+                Expanded(
+                  child: Divider(
+                    thickness: 1,
+                    color: Colors.white.withValues(alpha: 0.3),
+                  ),
+                ),
+              ],
+            ),
+
+            const Spacer(),
+            
+            MainButton(
+              onPressed: () {
+                
+              },
+              buttonStyle: AccentButtonStyle(), 
+              buttonContent: TextButtonContent(
+                label: "Email", 
+                style: AccentButtonStyle(),
+              ),
             ),
 
             const SizedBox(height: 16),
 
-            _loginButton(
-              icon: Icons.apple,
-              text: "Apple ID",
-              onTap: () {
-                Navigator.pushNamed(context, "/location");
+            MainButton(
+              onPressed: () {
+                
               },
+              buttonStyle: DarkButtonStyle(), 
+              buttonContent: TextButtonContent(
+                label: "Login", 
+                style: DarkButtonStyle(),
+              ),
             ),
 
-            const SizedBox(height: 30),
-            const Center(child: Text("OR", style: TextStyle(fontSize: 16))),
-
             const SizedBox(height: 20),
-
-            _simpleButton("Email", () {
-              Navigator.pushNamed(context, "/location");
-            }),
-
-            const SizedBox(height: 16),
-
-            _simpleButton("Login", () {
-              Navigator.pushNamed(context, "/location");
-            }),
           ],
-        ),
-      ),
-    );
-  }
-
-  Widget _loginButton({required IconData icon, required String text, required Function onTap}) {
-    return GestureDetector(
-      onTap: () => onTap(),
-      child: Container(
-        height: 55,
-        decoration: BoxDecoration(
-          color: const Color.fromARGB(255, 24, 246, 246),
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            Icon(icon, color: Colors.black, size: 28),
-            const SizedBox(width: 12),
-            Text(text, style: const TextStyle(color: Colors.black, fontSize: 18)),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _simpleButton(String text, Function onTap) {
-    return GestureDetector(
-      onTap: () => onTap(),
-      child: Container(
-        height: 55,
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(12),
-        ),
-        child: Center(
-          child: Text(text, style: const TextStyle(fontSize: 18)),
         ),
       ),
     );
