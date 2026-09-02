@@ -1,21 +1,25 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/classes/application/application_state.dart';
 import 'package:flutter_app/operators/google_login_operator.dart';
 import 'package:flutter_app/widgets/button_content/text_button_content.dart';
 import 'package:flutter_app/widgets/buttons/main_buttons/button.dart';
 import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/accent_button_style.dart';
 import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/dark_button_style.dart';
+import 'package:provider/provider.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final state = context.read<ApplicationState>();
+
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
-            colors: [Color(0xFF7700FF), Color(0xFF34177D),],
+            colors: [state.theme.backgroundGradientStart, state.theme.backgroundGradientEnd,],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -49,7 +53,9 @@ class LoginScreen extends StatelessWidget {
 
             MainButton(
               onPressed: () {
-                GoogleLoginOperator googleLoginOperator = GoogleLoginOperator();
+                final state = context.read<ApplicationState>();
+                
+                GoogleLoginOperator googleLoginOperator = GoogleLoginOperator(state);
                 googleLoginOperator.handleGoogleLogin();
               },
               buttonStyle: AccentButtonStyle(), 

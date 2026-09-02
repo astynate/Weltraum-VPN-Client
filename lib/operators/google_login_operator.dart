@@ -1,34 +1,37 @@
+import 'package:flutter_app/api/account_api.dart';
+import 'package:flutter_app/classes/account/account.dart';
+import 'package:flutter_app/classes/application/application_state.dart';
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:http/http.dart' as http;
 
 class GoogleLoginOperator {
+  ApplicationState state;
+
+  GoogleLoginOperator(this.state);
+
   final GoogleSignIn _googleSignIn = GoogleSignIn(
     clientId: '704264411166-0duu4t16pobdj0254d269toc8d6c8atp.apps.googleusercontent.com',
     scopes: ['email', 'profile'],
   );
 
-  Future<void> handleGoogleLogin() async {
+  Future<bool> handleGoogleLogin() async {
     try {
-      final GoogleSignInAccount? account = await _googleSignIn.signIn();
-      if (account == null) return;
+      final GoogleSignInAccount? googleAccount = await _googleSignIn.signIn();
+      
+      if (googleAccount == null) return false;
 
-      final GoogleSignInAuthentication auth = await account.authentication;
-      // final idToken = auth.idToken;
+      final GoogleSignInAuthentication authentification = await googleAccount.authentication;
+      
+      dynamic result = await AccountAPI.authorizeWithGoogle(googleAccount.email, googleAccount.displayName ?? "Unknown User", googleAccount.photoUrl);
 
-      // print(idToken);
-      print(account.displayName);
-      print(account.email);
-      print(account.photoUrl);
+      if (result != null && result.accont != null && result.accessToken != null && result.refreshToken != null) {
+        state.setAccount(result.account);
+        state.saveTokens(result.accessToken, result.refreshToken);
+      }
 
-      // final response = await http.post(
-      //   Uri.parse("https://YOUR_API_URL/api/auth/google"),
-      //   headers: {"Content-Type": "application/json"},
-      //   body: '{"idToken":"$idToken"}',
-      // );
-
-      // print("Backend response: ${response.body}");
+      return true;
     } catch (e) {
       print("Google login error: $e");
+      return false;
     }
   }
 }

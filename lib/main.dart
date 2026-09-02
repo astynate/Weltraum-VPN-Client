@@ -5,6 +5,8 @@ import 'screens/home/home_screen.dart';
 import 'classes/application/application_state.dart';
 import 'package:provider/provider.dart';
 
+// TO USE STATE
+// final state = context.read<ApplicationState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
@@ -12,17 +14,11 @@ void main() async {
   final jwtOperator = JasonWebTokenOperator();
   final bool loggedIn = await jwtOperator.setUpUser(state);
 
-  // runApp(  
-  //   WeltraumVPN(
-  //     appState: appState,
-  //     initialRoute: loggedIn ? "/home" : "/",
-  //   ),
-  // );
   runApp(
     ChangeNotifierProvider<ApplicationState>.value(
         value: state,
         child: WeltraumVPN(
-          appState: state,
+          state: state,
           initialRoute: '/login',
         ),
       ),
@@ -30,12 +26,12 @@ void main() async {
 }
 
 class WeltraumVPN extends StatelessWidget {
-  final ApplicationState appState;
+  final ApplicationState state;
   final String initialRoute;
 
   const WeltraumVPN({
     super.key,
-    required this.appState,
+    required this.state,
     required this.initialRoute,
   });
 
@@ -45,7 +41,7 @@ class WeltraumVPN extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: "Weltraum VPN",
       theme: ThemeData(
-        fontFamily: "Inter",
+        fontFamily: "Lato",
         brightness: Brightness.dark,
       ),
       initialRoute: initialRoute,

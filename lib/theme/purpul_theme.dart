@@ -27,4 +27,10 @@ class PurpulTheme extends AbstractTheme {
     
     @override
     Color get primary0Color => const Color.fromARGB(255, 0, 0, 0);
+
+    @override
+    Color get backgroundGradientStart => const Color.fromARGB(255, 100, 81, 154);
+    
+    @override
+    Color get backgroundGradientEnd => const Color.fromRGBO(22, 10, 56, 1);
 }

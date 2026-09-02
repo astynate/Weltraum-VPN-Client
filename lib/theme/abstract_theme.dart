@@ -11,6 +11,9 @@ abstract class AbstractTheme {
   Color primary50Color = const Color.fromARGB(255, 39, 17, 94);
   Color primary0Color = const Color.fromARGB(255, 0, 0, 0);
 
+  Color get backgroundGradientStart => const Color.fromARGB(255, 0, 0, 0);
+  Color get backgroundGradientEnd => const Color.fromARGB(255, 0, 0, 0);
+
   // Anthing Else
   BorderRadius borderRadius = const BorderRadius.all(Radius.circular(30));
 }

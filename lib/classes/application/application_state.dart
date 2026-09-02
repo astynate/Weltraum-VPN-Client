@@ -8,38 +8,51 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 class ApplicationState extends ChangeNotifier {
   final storage = const FlutterSecureStorage();
 
-  String? jwt;
-  Account? user;
+  String? accessToken;
+  String? refreshToken;
+  Account? account;
   AbstractTheme theme = PurpulTheme();
   Connection connection = Connection();
 
-  Future<void> loadJwt() async {
-    jwt = await storage.read(key: 'jwt');
+  Future<void> loadAccessToken() async {
+    accessToken = await storage.read(key: 'accessToken');
+  }
+
+  Future<void> loadRefreshToken() async {
+    refreshToken = await storage.read(key: 'refreshToken');
   }
 
   ApplicationState() {
     connection.addListener(notifyListeners);
   }
 
-  Future<void> saveJwt(String token) async {
-    jwt = token;
-    await storage.write(key: 'jwt', value: token);
+  Future<void> saveTokens(String inputAccessToken, String inputRefreshToken) async {
+    accessToken = inputAccessToken;
+    refreshToken = inputRefreshToken;
+
+    await storage.write(key: 'accessToken', value: inputAccessToken);
+    await storage.write(key: 'refreshToken', value: inputRefreshToken);
+
     notifyListeners();
   }
 
-  Future<void> clearJwt() async {
-    jwt = null;
-    user = null;
-    await storage.delete(key: 'jwt');
+  Future<void> clearTokens() async {
+    accessToken = null;
+    refreshToken = null;
+
+    await storage.delete(key: 'accessToken');
+    await storage.delete(key: 'refreshToken');
+
     notifyListeners();
   }
 
-  void setUser(Account u) {
-    user = u;
+  void setAccount(Account inputAccount) {
+    account = inputAccount;
     notifyListeners();
   }
 
   void setConnection (Connection inputConnection) {
     connection = inputConnection;
+    notifyListeners();
   }
 }
