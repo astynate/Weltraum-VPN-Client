@@ -2,11 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_app/classes/application/application_state.dart';
 import 'package:flutter_app/operators/route_operator.dart';
 import 'package:flutter_app/screens/locations/locations_screen.dart';
-import 'package:flutter_app/widgets/button_content/double_text_button_content.dart';
-import 'package:flutter_app/widgets/button_content/text_button_content.dart';
-import 'package:flutter_app/widgets/buttons/main_buttons/button.dart';
-import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/accent_button_style.dart';
-import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/normal_button_style.dart';
+import 'package:flutter_app/elements/button_content/double_text_button_content.dart';
+import 'package:flutter_app/elements/button_content/text_button_content.dart';
+import 'package:flutter_app/elements/buttons/main_buttons/button.dart';
+import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/accent_button_style.dart';
+import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/normal_button_style.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {

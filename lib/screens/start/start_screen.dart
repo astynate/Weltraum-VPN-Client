@@ -1,29 +1,31 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/classes/application/application_state.dart';
+import 'package:flutter_app/widgets/header/header.dart';
+import 'package:provider/provider.dart';
 
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final state = context.watch<ApplicationState>();
+
     return Scaffold(
-      body: Container(
-        width: double.infinity,
-        color: ApplicationState().theme.primary300Color, // ← no gradient, just a solid background
-        padding: const EdgeInsets.symmetric(horizontal: 24),
-        child: const Column(
-          children: [
-            SizedBox(height: 80),
-            Text(
-              "Weltraum VPN",
-              style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+      body: SizedBox.expand(
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              colors: [
+                state.theme.backgroundGradientStart,
+                state.theme.backgroundGradientEnd,
+              ],
+              begin: Alignment.topCenter,
+              end: Alignment.bottomCenter,
             ),
-            SizedBox(height: 10),
-            Text(
-              "Fast. Safe. Secure.",
-              style: TextStyle(fontSize: 18),
-            ),
-          ],
+          ),
+          child: const SafeArea(
+            child: Header(),
+          ),
         ),
       ),
     );

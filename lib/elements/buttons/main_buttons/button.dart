@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/widgets/button_content/button_content.dart';
-import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/button_style.dart';
+import 'package:flutter_app/elements/button_content/button_content.dart';
+import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/button_style.dart';
 
 class MainButton extends StatefulWidget {
   final VoidCallback onPressed;

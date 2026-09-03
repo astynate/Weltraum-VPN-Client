@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/classes/application/application_state.dart';
-import 'package:flutter_app/widgets/buttons/main_buttons/main_button_styles/button_style.dart';
+import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/button_style.dart';
 
 class BrightButtonStyle extends AbstractButtonStyle {
   @override

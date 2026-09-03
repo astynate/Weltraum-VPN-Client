@@ -19,16 +19,12 @@ class GoogleLoginOperator {
       
       if (googleAccount == null) return false;
 
-      final GoogleSignInAuthentication authentification = await googleAccount.authentication;
-      
       dynamic result = await AccountAPI.authorizeWithGoogle(googleAccount.email, googleAccount.displayName ?? "Unknown User", googleAccount.photoUrl);
 
       if (result != null && result.account != null && result.accessToken != null && result.refreshToken != null) {
         state.setAccount(result.account);
         state.saveTokens(result.accessToken, result.refreshToken);
       }
-
-      print(state);
 
       return true;
     } catch (e) {

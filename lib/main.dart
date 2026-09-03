@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/operators/jason_web_token_operator.dart';
 import 'package:flutter_app/screens/authorization/login_screen.dart';
+import 'package:flutter_app/screens/start/start_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'classes/application/application_state.dart';
 import 'package:provider/provider.dart';
@@ -23,7 +24,7 @@ void main() async {
         value: state,
         child: WeltraumVPN(
           state: state,
-          initialRoute: '/login',
+          initialRoute: '/',
         ),
       ),
     );
@@ -50,7 +51,7 @@ class WeltraumVPN extends StatelessWidget {
       ),
       initialRoute: initialRoute,
       routes: {
-        // "/": (context) => const StartScreen(),
+        "/": (context) => const StartScreen(),
         "/home": (context) => const HomeScreen(),
         "/login": (context) => const LoginScreen(),
       },
