@@ -14,6 +14,10 @@ void main() async {
   final jwtOperator = JasonWebTokenOperator();
   final bool loggedIn = await jwtOperator.setUpUser(state);
 
+  print(state.account);
+  print(state.accessToken);
+  print(state.refreshToken);
+
   runApp(
     ChangeNotifierProvider<ApplicationState>.value(
         value: state,

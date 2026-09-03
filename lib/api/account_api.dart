@@ -61,10 +61,7 @@ class AccountAPI {
   }
 
   static Future<dynamic> authorizeWithGoogle(String email, String displayedName, String? avatarPath) async {
-    print(email);
     Account? account = await getAccountByEmailAsync(email);
-
-    print(account); 
 
     if (account == null) {
       String? result = await createAnAccount(displayedName, email, avatarPath, null);
