@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_app/classes/application/application_state.dart';
+import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/button_style.dart';
 import 'package:flutter_app/operators/route_operator.dart';
 import 'package:flutter_app/screens/locations/locations_screen.dart';
 import 'package:flutter_app/elements/button_content/double_text_button_content.dart';
@@ -7,6 +8,7 @@ import 'package:flutter_app/elements/button_content/text_button_content.dart';
 import 'package:flutter_app/elements/buttons/main_buttons/button.dart';
 import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/accent_button_style.dart';
 import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/normal_button_style.dart';
+import 'package:flutter_app/widgets/header/header.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -37,8 +39,8 @@ class _HomeScreenState extends State<HomeScreen> {
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color(0xFF7700FF),
-              Color(0xFF34177D),
+              Color.fromARGB(255, 104, 73, 191),
+              Color.fromARGB(255, 8, 1, 29),
             ],
           ),
         ),
@@ -46,10 +48,10 @@ class _HomeScreenState extends State<HomeScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
+            const Header(),
             const SizedBox(height: 60),
-            const Text("Location", style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold)),
-            const SizedBox(height: 10),
-            const Text("Choose your desired location", style: TextStyle(fontSize: 18)),
+            const Center(child: Text("Location", style: TextStyle(fontSize: 54, fontWeight: FontWeight.bold))),
+            const Center(child: Text("Choose your desired location.", style: TextStyle(fontSize: 18))),
             const SizedBox(height: 40),
             const Spacer(),
 
@@ -76,11 +78,11 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 RouteOperator.push(context, const LocationsScreen());
               },
-              buttonStyle: NormalButtonStyle(), 
+              buttonStyle: BottomButtonStyle(), 
               buttonContent: DoubleTextButtonContent(
                 label: "Lautenbourg, France", 
                 text: "Active", 
-                style: NormalButtonStyle(),
+                style: BottomButtonStyle(),
                 icon: 'lib/assets/icons/flags/france.svg',
               ),
             ),
@@ -91,4 +93,18 @@ class _HomeScreenState extends State<HomeScreen> {
       ),
     );
   }
+}
+
+class BottomButtonStyle extends AbstractButtonStyle {
+  @override
+  Color get background => const Color.fromRGBO(255, 255, 255, 0.15);
+
+  @override
+  BorderRadius get borderRadius => ApplicationState().theme.borderRadius;
+
+  @override
+  Color get foreground => const Color.fromRGBO(255, 255, 255, 1);
+  
+  @override
+  Color get accent => const Color.fromARGB(255, 104, 73, 191);
 }

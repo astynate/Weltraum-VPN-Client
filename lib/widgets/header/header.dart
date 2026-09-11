@@ -1,13 +1,15 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 
 class Header extends StatefulWidget {
   const Header({super.key});
 
   @override
-  State<Header> createState() => _HeaderState();
+  State<Header> createState() => HeaderState();
 }
 
-class _HeaderState extends State<Header>
+class HeaderState extends State<Header>
     with SingleTickerProviderStateMixin {
   late AnimationController _controller;
 
@@ -15,6 +17,8 @@ class _HeaderState extends State<Header>
   late Animation<double> _scaleAnimation;
 
   bool menuOpen = false;
+
+  OverlayEntry? _overlayEntry;
 
   @override
   void initState() {
@@ -42,38 +46,58 @@ class _HeaderState extends State<Header>
   }
 
   void toggleMenu() {
+    if (menuOpen) {
+      closeMenu();
+    } else {
+      openMenu();
+    }
+  }
+
+  void openMenu() {
     setState(() {
-      menuOpen = !menuOpen;
+      menuOpen = true;
     });
 
-    if (menuOpen) {
-      _controller.forward();
-    } else {
-      _controller.reverse();
-    }
+    _overlayEntry = OverlayEntry(
+      builder: (context) {
+        return _buildMenuOverlay();
+      },
+    );
+
+    Overlay.of(context).insert(_overlayEntry!);
+
+    _controller.forward();
+  }
+
+  void closeMenu() {
+    _controller.reverse().then((_) {
+      if (!mounted) return;
+
+      _overlayEntry?.remove();
+      _overlayEntry = null;
+
+      setState(() {
+        menuOpen = false;
+      });
+    });
   }
 
   @override
   void dispose() {
+    _overlayEntry?.remove();
     _controller.dispose();
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return AnimatedContainer(
-        duration: const Duration(milliseconds: 400),
-        color: const Color.fromARGB(0, 255, 255, 255),
-        child: SafeArea(
-          child: Stack(
-            children: [
-              _buildHeader(),
-
-              if (menuOpen) _buildMenu(),
-            ],
-          ),
-        ),
-      );
+    return SizedBox(
+      height: 80,
+      child: SafeArea(
+        bottom: false,
+        child: _buildHeader(),
+      ),
+    );
   }
 
   Widget _buildHeader() {
@@ -112,77 +136,94 @@ class _HeaderState extends State<Header>
           const SizedBox(width: 12),
           const Spacer(),
 
-          // Menu button
-          GestureDetector(
-            onTap: toggleMenu,
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 300),
-              width: 52,
-              height: 52,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: Colors.white.withValues(alpha: .12),
-              ),
-              child: AnimatedRotation(
-                turns: menuOpen ? .125 : 0,
-                duration: const Duration(milliseconds: 350),
-                curve: Curves.easeOutBack,
-                child: Icon(
-                  menuOpen ? Icons.close : Icons.menu,
-                  color: Colors.white,
-                  size: 28,
-                ),
-              ),
-            ),
-          ),
+          createHeaderMenuButton(),
         ],
       ),
     );
   }
 
-  Widget _buildMenu() {
-    final items = [
-      'Profile',
-      'Settings',
-      'Language',
-      'Theme',
-      'Switch',
-      'Logout',
-    ];
+  PressableScale createHeaderMenuButton() {
+    return PressableScale(
+      scale: 0.90,
+      borderRadius: BorderRadius.circular(30),
+      onTap: toggleMenu,
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 300),
+        width: 52,
+        height: 52,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Colors.white.withValues(alpha: .12),
+        ),
+        child: AnimatedRotation(
+          turns: menuOpen ? .125 : 0,
+          duration: const Duration(milliseconds: 350),
+          curve: Curves.easeOutBack,
+          child: Icon(
+            menuOpen ? Icons.close : Icons.menu,
+            color: Colors.white,
+            size: 28,
+          ),
+        ),
+      ),
+    );
+  }
 
+  Widget _buildMenuOverlay() {
     return Positioned.fill(
-      child: Container(
-        color: const Color(0xFF29106A).withValues(alpha: .96),
-        child: Padding(
-          padding: const EdgeInsets.fromLTRB(32, 20, 16, 0),
-          child: Column(
-            children: [
-              // Top close/header
-              Row(
-                children: [
-                  Expanded(
-                    child: _menuHeader(),
-                  ),
-                  const SizedBox(width: 12),
-                  _closeButton(),
-                ],
-              ),
-
-              const SizedBox(height: 8),
-
-              Expanded(
-                child: ListView.builder(
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: items.length,
-                  itemBuilder: (context, index) {
-                    return _animatedMenuItem(
-                      text: items[index],
-                      index: index,
-                    );
-                  },
+      child: Material(
+        color: Colors.transparent,
+        child: BackdropFilter(
+            filter: ImageFilter.blur(
+              sigmaX: 30,
+              sigmaY: 30,
+            ),
+          child: Container(
+            color: const Color(0xFF29106A).withValues(alpha: 0.5),
+            child: SafeArea(
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(32, 20, 16, 0),
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _menuHeader(),
+                        ),
+          
+                        const SizedBox(width: 12),
+          
+                        _closeButton(),
+                      ],
+                    ),
+          
+                    const SizedBox(height: 8),
+          
+                    Expanded(
+                      child: ListView.builder(
+                        physics: const NeverScrollableScrollPhysics(),
+                        itemCount: 6,
+                        itemBuilder: (context, index) {
+                          const items = [
+                            'Profile',
+                            'Settings',
+                            'Language',
+                            'Theme',
+                            'Switch',
+                            'Logout',
+                          ];
+          
+                          return _animatedMenuItem(
+                            text: items[index],
+                            index: index,
+                          );
+                        },
+                      ),
+                    ),
+                  ],
                 ),
               ),
-            ],
+            ),
           ),
         ),
       ),
@@ -203,18 +244,9 @@ class _HeaderState extends State<Header>
         );
       },
       child: Container(
-        height: 52,
+        height: 60,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(28),
-          gradient: LinearGradient(
-            colors: [
-              Colors.white.withValues(alpha: .16),
-              Colors.white.withValues(alpha: .10),
-            ],
-          ),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: .15),
-          ),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withValues(alpha: .12),
@@ -225,10 +257,10 @@ class _HeaderState extends State<Header>
         alignment: Alignment.centerLeft,
         padding: const EdgeInsets.symmetric(horizontal: 30),
         child: const Text(
-          'Menu',
+          '',
           style: TextStyle(
             color: Colors.white,
-            fontSize: 20,
+            fontSize: 24,
             fontWeight: FontWeight.w600,
           ),
         ),
@@ -237,22 +269,24 @@ class _HeaderState extends State<Header>
   }
 
   Widget _closeButton() {
-    return GestureDetector(
-      onTap: toggleMenu,
+    return PressableScale(
+      scale: 0.88,
+      borderRadius: BorderRadius.circular(30),
+      onTap: closeMenu,
       child: Container(
-        width: 44,
-        height: 44,
+        width: 52,
+        height: 52,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
           color: Colors.white.withValues(alpha: .15),
-          border: Border.all(
-            color: Colors.white.withValues(alpha: .15),
-          ),
+          // border: Border.all(
+          //   color: Colors.white.withValues(alpha: .15),
+          // ),
         ),
         child: const Icon(
           Icons.close,
           color: Colors.white70,
-          size: 27,
+          size: 28,
         ),
       ),
     );
@@ -299,46 +333,111 @@ class _HeaderState extends State<Header>
   }
 
   Widget _menuButton(String text) {
-    return Material(
-      color: Colors.transparent,
-      child: InkWell(
-        borderRadius: BorderRadius.circular(28),
-        onTap: () {
-          debugPrint('$text clicked');
-        },
-        child: Container(
-          height: 51,
-          decoration: BoxDecoration(
-            borderRadius: BorderRadius.circular(28),
-            gradient: LinearGradient(
-              begin: Alignment.centerLeft,
-              end: Alignment.centerRight,
-              colors: [
-                Colors.white.withValues(alpha: .15),
-                Colors.white.withValues(alpha: .09),
-              ],
-            ),
-            border: Border.all(
-              color: Colors.white.withValues(alpha: .15),
-              width: 1,
-            ),
-            boxShadow: [
-              BoxShadow(
-                color: Colors.black.withValues(alpha: .10),
-                blurRadius: 8,
-                offset: const Offset(0, 3),
-              ),
+    return PressableScale(
+      scale: 0.96,
+      borderRadius: BorderRadius.circular(28),
+      onTap: () {
+        debugPrint('$text clicked');
+      },
+      child: Container(
+        height: 60,
+        decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(28),
+          gradient: LinearGradient(
+            begin: Alignment.centerLeft,
+            end: Alignment.centerRight,
+            colors: [
+              Colors.white.withValues(alpha: .15),
+              Colors.white.withValues(alpha: .09),
             ],
           ),
-          padding: const EdgeInsets.symmetric(horizontal: 30),
-          alignment: Alignment.centerLeft,
-          child: Text(
-            text,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 19,
-              fontWeight: FontWeight.w600,
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: .10),
+              blurRadius: 8,
+              offset: const Offset(0, 3),
             ),
+          ],
+        ),
+        padding: const EdgeInsets.symmetric(horizontal: 30),
+        alignment: Alignment.centerLeft,
+        child: Text(
+          text,
+          style: const TextStyle(
+            color: Colors.white,
+            fontSize: 19,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class PressableScale extends StatefulWidget {
+  final Widget child;
+  final VoidCallback? onTap;
+  final double scale;
+  final BorderRadius borderRadius;
+
+  const PressableScale({
+    super.key,
+    required this.child,
+    required this.onTap,
+    this.scale = 0.96,
+    this.borderRadius = BorderRadius.zero,
+  });
+
+  @override
+  State<PressableScale> createState() => _PressableScaleState();
+}
+
+class _PressableScaleState extends State<PressableScale> {
+  bool _pressed = false;
+
+  void _setPressed(bool value) {
+    if (_pressed == value) return;
+
+    setState(() {
+      _pressed = value;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      behavior: HitTestBehavior.opaque,
+
+      onTapDown: (_) {
+        _setPressed(true);
+      },
+
+      onTapUp: (_) {
+        _setPressed(false);
+      },
+
+      onTapCancel: () {
+        _setPressed(false);
+      },
+
+      onTap: widget.onTap,
+
+      child: AnimatedScale(
+        scale: _pressed ? widget.scale : 1.0,
+        duration: const Duration(milliseconds: 110),
+        curve: Curves.easeOutCubic,
+
+        child: Material(
+          color: Colors.transparent,
+          borderRadius: widget.borderRadius,
+
+          child: InkWell(
+            borderRadius: widget.borderRadius,
+            splashColor: Colors.white.withValues(alpha: .16),
+            highlightColor: Colors.white.withValues(alpha: .07),
+            onTap: widget.onTap,
+
+            child: widget.child,
           ),
         ),
       ),

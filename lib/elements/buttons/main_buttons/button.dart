@@ -32,7 +32,9 @@ class _MainButtonState extends State<MainButton> {
         curve: Curves.easeOut,
         child: Material(
           color: _pressed
-              ? widget.buttonStyle.background.withValues(alpha: 0.85)
+              ? widget.buttonStyle.background.withValues(
+                alpha: widget.buttonStyle.background.a * 0.85
+              )
               : widget.buttonStyle.background,
           borderRadius: widget.buttonStyle.borderRadius,
           child: InkWell(

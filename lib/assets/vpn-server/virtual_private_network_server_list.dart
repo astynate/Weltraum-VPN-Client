@@ -1,6 +1,6 @@
 import 'package:flutter_app/assets/vpn-server/virtual_private_netwrok_server.dart';
 
-final Map<String, VirtualPrivateNetwrokServer> vpnServers = {
+final Map<String, VirtualPrivateNetwrokServer> servers = {
   "France_Lautenbourg": VirtualPrivateNetwrokServer(
     serverAddress: "169.58.134.146:51820",
     flag: "lib/assets/icons/flags/france.svg",
@@ -17,7 +17,9 @@ final Map<String, VirtualPrivateNetwrokServer> vpnServers = {
         AllowedIPs = 0.0.0.0/0
         Endpoint = 169.58.134.146:51820
         PersistentKeepalive = 25
-      """
+      """, 
+      countryCode: 'FR', 
+      type: ServerType.Free
     ),
     "Germany_Hambourg": VirtualPrivateNetwrokServer(
     serverAddress: "169.58.134.146:51820",
@@ -35,6 +37,8 @@ final Map<String, VirtualPrivateNetwrokServer> vpnServers = {
         AllowedIPs = 0.0.0.0/0
         Endpoint = 169.58.134.146:51820
         PersistentKeepalive = 25
-      """
+      """, 
+      countryCode: 'GE', 
+      type: ServerType.Premium
     ),
 };

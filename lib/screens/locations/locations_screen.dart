@@ -1,5 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/assets/vpn-server/virtual_private_network_server_list.dart';
+import 'package:flutter_app/assets/vpn-server/virtual_private_netwrok_server.dart';
 import 'package:flutter_app/classes/application/application_state.dart';
+import 'package:flutter_app/elements/button_content/double_text_button_content.dart';
+import 'package:flutter_app/elements/buttons/main_buttons/button.dart';
+import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/button_style.dart';
+import 'package:flutter_app/widgets/header/header.dart';
+import 'package:flutter_svg/svg.dart';
 
 class LocationsScreen extends StatelessWidget {
   const LocationsScreen({super.key});
@@ -10,7 +17,10 @@ class LocationsScreen extends StatelessWidget {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [ Color(0xFF7700FF), Color(0xFF34177D),],
+            colors: [
+              Color.fromARGB(255, 104, 73, 191),
+              Color.fromARGB(255, 8, 1, 29),
+            ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
           ),
@@ -23,216 +33,80 @@ class LocationsScreen extends StatelessWidget {
                     Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // const Header(),
+                        HeaderState(),
+
                         Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
                           child: Column(
                             children: [
-                                        Row(
-                                        children: [
-                                          IconButton(
-                                            icon: const Icon(Icons.arrow_back, color: Colors.white),
-                                            onPressed: () => Navigator.of(context).pop(),
-                                          ),
-                                          const Spacer(),
-                                          const Text(
-                                            'Locations',
-                                            style: TextStyle(
-                                              color: Colors.white,
-                                              fontSize: 22,
-                                              fontWeight: FontWeight.w600,
+                              Container(
+                                decoration: BoxDecoration(
+                                  color: Colors.white.withValues(alpha: 0.12),
+                                  borderRadius: ApplicationState().theme.borderRadius,
+                                ),
+                                padding:
+                                    const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                                    child: const Row(
+                                      children: [
+                                        Icon(Icons.search, color: Colors.white70),
+                                        SizedBox(width: 6),
+                                        Expanded(
+                                          child: TextField(
+                                            style: TextStyle(color: Colors.white),
+                                            decoration: InputDecoration(
+                                              hintText: 'Search location',
+                                              hintStyle:
+                                                  TextStyle(color: Colors.white54, fontSize: 17),
+                                              border: InputBorder.none,
                                             ),
                                           ),
-                                          const Spacer(),
-                                          IconButton(
-                                            icon: const Icon(Icons.menu, color: Colors.white),
-                                            onPressed: () => Navigator.of(context).pop(),
-                                          ),
-                                        ],
-                                      ),
+                                        ),
+                                      ],
+                                    ),
+                              ),
+                              ],
+                            )   
+                          ),
+                        ],
+                      ),
+            
+                      const SizedBox(height: 0),
 
-                        Container(
-                        decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.12),
-                          borderRadius: ApplicationState().theme.borderRadius,
-                        ),
-                        padding:
-                            const EdgeInsets.symmetric(horizontal: 15, vertical: 5),
-                            child: const Row(
+                      Expanded(
+                        child: SingleChildScrollView(
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                            child: Column(
                               children: [
-                                Icon(Icons.search, color: Colors.white70),
-                                SizedBox(width: 8),
-                                Expanded(
-                                  child: TextField(
-                                    style: TextStyle(color: Colors.white),
-                                    decoration: InputDecoration(
-                                      hintText: 'Search location',
-                                      hintStyle:
-                                          TextStyle(color: Colors.white54, fontSize: 16),
-                                      border: InputBorder.none,
+                                  Padding(
+                                    padding: const EdgeInsets.symmetric(horizontal: 24),
+                                    child: _sectionHeader(
+                                      title: 'Free',
+                                      speedLabel: '1MB/S',
                                     ),
                                   ),
-                                ),
+
+                                  const SizedBox(height: 5),
+
+                                for (var server in servers.values)
+                                  if (server.type == ServerType.Free)
+                                    _LocationTile(
+                                      flag: server.flag,
+                                      city: server.city,
+                                      countryCode: server.countryCode,
+                                      label: server.type.toString(),
+                                      latencyMs: 12,
+                                      type: server.type.name,
+                                    ),
+
+                                  const SizedBox(height: 18),
                               ],
                             ),
+                          ),
+                        ),
                       ),
-
-                      ],
-                      ) 
-                          
-                    ),
-                  ],
-                ),
-            
-                const SizedBox(height: 24),
-                // Free header
-                _sectionHeader(
-                  title: 'Free',
-                  speedLabel: '1MB/S',
-                ),
-                const SizedBox(height: 12),
-                const Expanded(
-                  child: SingleChildScrollView(
-                    child: Column(
-                      children: [
-                          _LocationTile(
-                            flag: '🇫🇷',
-                            city: 'Paris',
-                            countryCode: 'FR',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇩🇪',
-                            city: 'Hamburg',
-                            countryCode: 'GE',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇵🇱',
-                            city: 'Warsaw',
-                            countryCode: 'PO',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇵🇱',
-                            city: 'Warsaw',
-                            countryCode: 'PO',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇵🇱',
-                            city: 'Warsaw',
-                            countryCode: 'PO',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇵🇱',
-                            city: 'Warsaw',
-                            countryCode: 'PO',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇵🇱',
-                            city: 'Warsaw',
-                            countryCode: 'PO',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇫🇷',
-                            city: 'Paris',
-                            countryCode: 'FR',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇩🇪',
-                            city: 'Hamburg',
-                            countryCode: 'GE',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇵🇱',
-                            city: 'Warsaw',
-                            countryCode: 'PO',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇵🇱',
-                            city: 'Warsaw',
-                            countryCode: 'PO',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇵🇱',
-                            city: 'Warsaw',
-                            countryCode: 'PO',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇵🇱',
-                            city: 'Warsaw',
-                            countryCode: 'PO',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                          _LocationTile(
-                            flag: '🇵🇱',
-                            city: 'Warsaw',
-                            countryCode: 'PO',
-                            label: 'Free',
-                            latencyMs: 12,
-                          ),
-                      ],
-                    ),
-                  ),
-                ),
-                // Free list
-                // const SizedBox(height: 24),
-                // // Premium header
-                // _sectionHeader(
-                //   title: 'Premium',
-                //   speedLabel: '1GB/S',
-                // ),
-                // const SizedBox(height: 12),
-                // // Premium list
-                // Expanded(
-                //   child: ListView(
-                //     children: const [
-                //       _LocationTile(
-                //         flag: '🇺🇸',
-                //         city: 'Los Angeles',
-                //         countryCode: 'US',
-                //         label: 'Premium',
-                //         latencyMs: 12,
-                //       ),
-                //       _LocationTile(
-                //         flag: '🇬🇧',
-                //         city: 'London',
-                //         countryCode: 'UK',
-                //         label: 'Premium',
-                //         latencyMs: 12,
-                //       ),
-                //       _LocationTile(
-                //         flag: '🏳️',
-                //         city: 'Solenberg',
-                //         countryCode: 'SO',
-                //         label: 'Premium',
-                //         latencyMs: 12,
-                //       ),
-                //     ],
-                //   ),
-                // ),
-              ],
+                    ],
             ),
           ),
         ),
@@ -262,7 +136,7 @@ class LocationsScreen extends StatelessWidget {
             speedLabel,
             style: const TextStyle(
               color: Colors.white,
-              fontSize: 12,
+              fontSize: 14,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -277,6 +151,7 @@ class _LocationTile extends StatelessWidget {
   final String city;
   final String countryCode;
   final String label;
+  final String type;
   final int latencyMs;
 
   const _LocationTile({
@@ -285,75 +160,99 @@ class _LocationTile extends StatelessWidget {
     required this.countryCode,
     required this.label,
     required this.latencyMs,
+    required this.type
   });
 
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.symmetric(vertical: 6),
-      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+      margin: const EdgeInsets.symmetric(vertical: 4),
+      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
       decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.10),
+        color: Colors.white.withValues(alpha: 0.05),
         borderRadius: BorderRadius.circular(16),
       ),
       child: Row(
         children: [
-          Text(
-            flag,
-            style: const TextStyle(fontSize: 22),
+         Container(
+            width: 48,
+            height: 48,
+            decoration: const BoxDecoration(
+              shape: BoxShape.circle,
+            ),
+            child: ClipOval(
+              child: SvgPicture.asset(
+                flag,
+                width: 46,
+                height: 46,
+              ),
+            ),
           ),
-          const SizedBox(width: 12),
+          const SizedBox(width: 10,),
           Column(
+            mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                city,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 15,
-                  fontWeight: FontWeight.w500,
-                ),
+                "$city, $countryCode", 
+                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
               ),
               Text(
-                countryCode,
-                style: const TextStyle(
-                  color: Colors.white54,
-                  fontSize: 12,
+                type, 
+                style: TextStyle(
+                  fontSize: 15, 
+                  fontWeight: FontWeight.w400, 
+                  color: Theme.of(context).textTheme.bodyMedium!.color!.withValues(alpha: 0.8),
                 ),
               ),
             ],
           ),
+        
           const Spacer(),
-          Column(
+          const Column(
             crossAxisAlignment: CrossAxisAlignment.end,
             children: [
-              Row(
-                children: [
-                  Icon(Icons.bar_chart,
-                      size: 16, color: Colors.greenAccent.shade200),
-                  const SizedBox(width: 4),
-                  Text(
-                    '${latencyMs}MS',
-                    style: const TextStyle(
-                      color: Colors.white70,
-                      fontSize: 11,
-                    ),
-                  ),
-                ],
-              ),
-              const SizedBox(height: 4),
-              Text(
-                label,
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 11,
-                  fontWeight: FontWeight.w500,
-                ),
-              ),
+              // Row(
+              //   children: [
+              //     Icon(Icons.bar_chart,
+              //         size: 16, color: Colors.greenAccent.shade200),
+              //     const SizedBox(width: 4),
+              //     Text(
+              //       '${latencyMs}MS',
+              //       style: const TextStyle(
+              //         color: Colors.white70,
+              //         fontSize: 11,
+              //       ),
+              //     ),
+              //   ],
+              // ),
+              // const SizedBox(height: 4),
+              // Text(
+              //   label,
+              //   style: const TextStyle(
+              //     color: Colors.white,
+              //     fontSize: 11,
+              //     fontWeight: FontWeight.w500,
+              //   ),
+              // ),
             ],
           ),
         ],
       ),
     );
   }
+}
+
+class LocationButtonStyle extends AbstractButtonStyle {
+  @override
+  Color get background => const Color.fromRGBO(255, 255, 255, 0.15);
+
+  @override
+  BorderRadius get borderRadius => ApplicationState().theme.borderRadius;
+
+  @override
+  Color get foreground => const Color.fromRGBO(255, 255, 255, 1);
+  
+  @override
+  Color get accent => const Color.fromARGB(255, 104, 73, 191);
 }

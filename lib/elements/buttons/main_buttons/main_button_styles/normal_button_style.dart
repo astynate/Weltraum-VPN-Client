@@ -7,10 +7,10 @@ class NormalButtonStyle extends AbstractButtonStyle {
   Color get background => ApplicationState().theme.primary300Color;
 
   @override
-  BorderRadius get borderRadius =>  ApplicationState().theme.borderRadius;
+  BorderRadius get borderRadius => ApplicationState().theme.borderRadius;
 
   @override
-  Color get foreground => ApplicationState().theme.primary600Color;
+  Color get foreground => const Color.fromARGB(255, 2, 21, 61);
   
   @override
   Color get accent => ApplicationState().theme.primary200Color;
