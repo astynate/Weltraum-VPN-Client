@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/assets/vpn-server/virtual_private_netwrok_server.dart';
 import 'package:flutter_app/classes/account/account.dart';
 import 'package:flutter_app/classes/connection/connection.dart';
 import 'package:flutter_app/theme/abstract_theme.dart';
@@ -13,6 +14,11 @@ class ApplicationState extends ChangeNotifier {
   Account? account;
   AbstractTheme theme = PurpulTheme();
   Connection connection = Connection();
+
+  void setServer(VirtualPrivateNetworkServer server) {
+    connection.server = server;
+    notifyListeners();
+  }
 
   Future<void> loadAccessToken() async {
     accessToken = await storage.read(key: 'accessToken');

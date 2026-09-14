@@ -5,14 +5,39 @@ import 'package:flutter_app/classes/application/application_state.dart';
 import 'package:flutter_app/elements/button_content/double_text_button_content.dart';
 import 'package:flutter_app/elements/buttons/main_buttons/button.dart';
 import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/button_style.dart';
-import 'package:flutter_app/widgets/header/header.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:flutter_app/elements/buttons/return_button/return_button.dart';
+import 'package:flutter_app/widgets/menu_button/menu_button.dart';
+import 'package:flutter_app/widgets/menu_button/menu_controller.dart';
+import 'package:provider/provider.dart';
 
-class LocationsScreen extends StatelessWidget {
+class LocationsScreen extends StatefulWidget {
   const LocationsScreen({super.key});
 
   @override
+  State<LocationsScreen> createState() => _LocationsScreenState();
+}
+
+class _LocationsScreenState extends State<LocationsScreen>
+    with SingleTickerProviderStateMixin {
+
+  late final HeaderMenuController menuController;
+
+  @override
+  void initState() {
+    super.initState();
+    menuController = HeaderMenuController(this);
+  }
+
+  @override
+  void dispose() {
+    menuController.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    ApplicationState state = context.watch<ApplicationState>();
+
     return Scaffold(
       body: Container(
         decoration: const BoxDecoration(
@@ -30,83 +55,136 @@ class LocationsScreen extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
             child: Column(
               children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        // const Header(),
-                        HeaderState(),
-
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 20),
-                          child: Column(
-                            children: [
-                              Container(
-                                decoration: BoxDecoration(
-                                  color: Colors.white.withValues(alpha: 0.12),
-                                  borderRadius: ApplicationState().theme.borderRadius,
-                                ),
-                                padding:
-                                    const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
-                                    child: const Row(
-                                      children: [
-                                        Icon(Icons.search, color: Colors.white70),
-                                        SizedBox(width: 6),
-                                        Expanded(
-                                          child: TextField(
-                                            style: TextStyle(color: Colors.white),
-                                            decoration: InputDecoration(
-                                              hintText: 'Search location',
-                                              hintStyle:
-                                                  TextStyle(color: Colors.white54, fontSize: 17),
-                                              border: InputBorder.none,
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                              ),
-                              ],
-                            )   
-                          ),
-                        ],
-                      ),
-            
-                      const SizedBox(height: 0),
-
-                      Expanded(
-                        child: SingleChildScrollView(
-                          child: Padding(
-                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
-                            child: Column(
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 15, vertical: 0),
+                      child: Column(
+                        children: [
+                          Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 10.0),
+                            child: Row(
                               children: [
-                                  Padding(
-                                    padding: const EdgeInsets.symmetric(horizontal: 24),
-                                    child: _sectionHeader(
-                                      title: 'Free',
-                                      speedLabel: '1MB/S',
-                                    ),
-                                  ),
-
-                                  const SizedBox(height: 5),
-
-                                for (var server in servers.values)
-                                  if (server.type == ServerType.Free)
-                                    _LocationTile(
-                                      flag: server.flag,
-                                      city: server.city,
-                                      countryCode: server.countryCode,
-                                      label: server.type.toString(),
-                                      latencyMs: 12,
-                                      type: server.type.name,
-                                    ),
-
-                                  const SizedBox(height: 18),
+                                const ReturnButton(),
+                                const Spacer(),
+                                const Text("Locations", style: TextStyle(fontSize: 24, fontWeight: FontWeight(600)),),
+                                const Spacer(),
+                                HeaderMenuButton(controller: menuController),
                               ],
                             ),
                           ),
+
+                          Container(
+                            decoration: BoxDecoration(
+                              color: Colors.white.withValues(alpha: 0.12),
+                              borderRadius: ApplicationState().theme.borderRadius,
+                            ),
+                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 5),
+                            child: const Row(
+                              children: [
+                                Icon(Icons.search, color: Colors.white70),
+                                SizedBox(width: 6),
+                                Expanded(
+                                  child: TextField(
+                                    style: TextStyle(color: Colors.white),
+                                    decoration: InputDecoration(
+                                      hintText: 'Search location',
+                                      hintStyle: TextStyle(
+                                        color: Colors.white54,
+                                        fontSize: 17,
+                                      ),
+                                      border: InputBorder.none,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+
+                const SizedBox(height: 20),
+
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: const BorderRadius.vertical(
+                      top: Radius.circular(30),
+                    ),
+                    child: SingleChildScrollView(
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+                        child: Column(
+                          children: [
+                            Padding(
+                              padding: const EdgeInsets.symmetric(horizontal: 24),
+                              child: _sectionHeader(
+                                title: 'Free',
+                                speedLabel: '1MB/S',
+                              ),
+                            ),
+                    
+                            const SizedBox(height: 5),
+                    
+                            for (var server in servers.values)
+                              if (server.type == ServerType.Free) ...[
+                                MainButton(
+                                  onPressed: () {
+                                    state.setServer(server);
+                                    Navigator.of(context).maybePop();
+                                  },
+                                  buttonStyle: LocationButtonStyle(),
+                                  buttonContent: DoubleTextButtonContent(
+                                    label: "${server.city}, ${server.countryCode}",
+                                    text: server.type.name,
+                                    icon: server.flag,
+                                    style: LocationButtonStyle(),
+                                  ),
+                                ),
+                                const SizedBox(height: 3),
+                              ],
+                    
+                              const SizedBox(height: 12),
+                      
+                              Padding(
+                                padding: const EdgeInsets.symmetric(horizontal: 24),
+                                child: _sectionHeader(
+                                  title: 'Premium',
+                                  speedLabel: '250 MB/S',
+                                ),
+                              ),
+                      
+                              const SizedBox(height: 5),
+                      
+                              for (var server in servers.values)
+                                if (server.type == ServerType.Premium) ...[
+                                  MainButton(
+                                    onPressed: () {
+                                      state.setServer(server);
+                                      Navigator.of(context).maybePop();
+                                    },
+                                    buttonStyle: LocationButtonStyle(),
+                                    buttonContent: DoubleTextButtonContent(
+                                      label: "${server.city}, ${server.countryCode}",
+                                      text: server.type.name,
+                                      icon: server.flag,
+                                      style: LocationButtonStyle(),
+                                    ),
+                                  ),
+                                  const SizedBox(height: 3),
+                                ],
+
+                                const SizedBox(height: 15),
+                          ],
                         ),
                       ),
-                    ],
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
         ),
@@ -146,113 +224,84 @@ class LocationsScreen extends StatelessWidget {
   }
 }
 
-class _LocationTile extends StatelessWidget {
-  final String flag;
-  final String city;
-  final String countryCode;
-  final String label;
-  final String type;
-  final int latencyMs;
+class LocationTile extends StatefulWidget {
+  final VirtualPrivateNetworkServer server;
 
-  const _LocationTile({
-    required this.flag,
-    required this.city,
-    required this.countryCode,
-    required this.label,
-    required this.latencyMs,
-    required this.type
+  const LocationTile({
+    super.key,
+    required this.server,
   });
 
   @override
+  State<LocationTile> createState() => _LocationTileState();
+}
+
+class _LocationTileState extends State<LocationTile> {
+  bool _hover = false;
+  bool _pressed = false;
+
+  @override
   Widget build(BuildContext context) {
-    return Container(
-      margin: const EdgeInsets.symmetric(vertical: 4),
-      padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
-      decoration: BoxDecoration(
-        color: Colors.white.withValues(alpha: 0.05),
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Row(
-        children: [
-         Container(
-            width: 48,
-            height: 48,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-            ),
-            child: ClipOval(
-              child: SvgPicture.asset(
-                flag,
-                width: 46,
-                height: 46,
+    return MouseRegion(
+      onEnter: (_) => setState(() => _hover = true),
+      onExit: (_) => setState(() {
+        _hover = false;
+        _pressed = false;
+      }),
+
+      child: Listener(
+        onPointerDown: (_) => setState(() => _pressed = true),
+        onPointerUp: (_) => setState(() => _pressed = false),
+
+        child: AnimatedScale(
+          scale: _pressed ? 0.95 : 1.0,
+          duration: const Duration(milliseconds: 120),
+          curve: Curves.easeOut,
+
+          child: Material(
+            color: _pressed
+                ? Colors.white.withValues(alpha: 0.10)
+                : _hover
+                    ? Colors.white.withValues(alpha: 0.07)
+                    : Colors.white.withValues(alpha: 0.05),
+
+            borderRadius: BorderRadius.circular(16),
+
+            child: InkWell(
+              borderRadius: BorderRadius.circular(16),
+              splashColor: Colors.white.withValues(alpha: 0.1),
+              highlightColor: Colors.white.withValues(alpha: 0.05),
+
+              onTap: () {
+                print("Clicked!");
+              },
+
+              child: Container(
+                height: 70,
+                width: double.infinity,
+                alignment: Alignment.centerLeft,
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: const Text("Location Tile"),
               ),
             ),
           ),
-          const SizedBox(width: 10,),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                "$city, $countryCode", 
-                style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
-              ),
-              Text(
-                type, 
-                style: TextStyle(
-                  fontSize: 15, 
-                  fontWeight: FontWeight.w400, 
-                  color: Theme.of(context).textTheme.bodyMedium!.color!.withValues(alpha: 0.8),
-                ),
-              ),
-            ],
-          ),
-        
-          const Spacer(),
-          const Column(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              // Row(
-              //   children: [
-              //     Icon(Icons.bar_chart,
-              //         size: 16, color: Colors.greenAccent.shade200),
-              //     const SizedBox(width: 4),
-              //     Text(
-              //       '${latencyMs}MS',
-              //       style: const TextStyle(
-              //         color: Colors.white70,
-              //         fontSize: 11,
-              //       ),
-              //     ),
-              //   ],
-              // ),
-              // const SizedBox(height: 4),
-              // Text(
-              //   label,
-              //   style: const TextStyle(
-              //     color: Colors.white,
-              //     fontSize: 11,
-              //     fontWeight: FontWeight.w500,
-              //   ),
-              // ),
-            ],
-          ),
-        ],
+        ),
       ),
     );
   }
 }
 
+
 class LocationButtonStyle extends AbstractButtonStyle {
   @override
-  Color get background => const Color.fromRGBO(255, 255, 255, 0.15);
+  Color get background => const Color.fromRGBO(255, 255, 255, 0.07);
 
   @override
   BorderRadius get borderRadius => ApplicationState().theme.borderRadius;
 
   @override
   Color get foreground => const Color.fromRGBO(255, 255, 255, 1);
-  
+
   @override
   Color get accent => const Color.fromARGB(255, 104, 73, 191);
 }

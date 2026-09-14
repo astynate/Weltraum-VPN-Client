@@ -1,4 +1,4 @@
-class VirtualPrivateNetwrokServer {
+class VirtualPrivateNetworkServer {
   final String serverAddress;
   final String configuration;
   final String flag;
@@ -7,7 +7,7 @@ class VirtualPrivateNetwrokServer {
   final String countryCode;
   final ServerType type;
 
-  VirtualPrivateNetwrokServer({
+  VirtualPrivateNetworkServer({
     required this.serverAddress,
     required this.configuration,
     required this.flag, 
@@ -22,24 +22,4 @@ enum ServerType {
   Free,
   Premium,
   Professional,
-}
-
-class VirtualPrivateNetworkServer {
-  final String serverAddress;
-  final String configuration;
-  final String flag;
-  final String country;
-  final String city;
-  final String countryCode;
-  final ServerType type;
-
-  VirtualPrivateNetworkServer({
-    required this.serverAddress,
-    required this.configuration,
-    required this.flag,
-    required this.country,
-    required this.city,
-    required this.countryCode,
-    required this.type,
-  });
 }

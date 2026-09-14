@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_app/assets/vpn-server/virtual_private_network_server_list.dart';
 import 'package:flutter_app/classes/application/application_state.dart';
 import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/button_style.dart';
 import 'package:flutter_app/operators/route_operator.dart';
@@ -29,7 +30,10 @@ class _HomeScreenState extends State<HomeScreen> {
   @override
   Widget build(BuildContext context) {
     final state = context.watch<ApplicationState>();
-    // final vpnOperator = VirtualPrivateNetworkOperator(state);
+
+    if (state.connection.server == null) {
+      state.setServer(servers.values.first);
+    }
 
     return Scaffold(
       body: Container(
@@ -80,10 +84,10 @@ class _HomeScreenState extends State<HomeScreen> {
               },
               buttonStyle: BottomButtonStyle(), 
               buttonContent: DoubleTextButtonContent(
-                label: "Lautenbourg, France", 
-                text: "Active", 
+                label: "${state.connection.server!.city}, ${state.connection.server!.country}", 
+                text: state.connection.isConnected ? "Active" : "Passive", 
                 style: BottomButtonStyle(),
-                icon: 'lib/assets/icons/flags/france.svg',
+                icon: state.connection.server!.flag,
               ),
             ),
             
