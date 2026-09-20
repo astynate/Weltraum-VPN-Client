@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/assets/vpn-server/virtual_private_netwrok_server.dart';
-import 'package:flutter_app/classes/account/account.dart';
-import 'package:flutter_app/classes/connection/connection.dart';
-import 'package:flutter_app/theme/abstract_theme.dart';
-import 'package:flutter_app/theme/purpul_theme.dart';
+import 'package:weltraum/assets/vpn-server/virtual_private_netwrok_server.dart';
+import 'package:weltraum/classes/account/account.dart';
+import 'package:weltraum/classes/connection/connection.dart';
+import 'package:weltraum/theme/abstract_theme.dart';
+import 'package:weltraum/theme/purpul_theme.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 class ApplicationState extends ChangeNotifier {
@@ -17,6 +17,11 @@ class ApplicationState extends ChangeNotifier {
 
   void setServer(VirtualPrivateNetworkServer server) {
     connection.server = server;
+    notifyListeners();
+  }
+
+  void changeConnectionState(bool connectionState) {
+    connection.isConnected = connectionState;
     notifyListeners();
   }
 

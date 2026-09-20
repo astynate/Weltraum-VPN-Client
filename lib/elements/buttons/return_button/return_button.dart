@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/widgets/header/header.dart';
+import 'package:weltraum/widgets/header/header.dart';
 
 class ReturnButton extends StatefulWidget {
   final bool hasText;
@@ -48,8 +48,11 @@ class _ReturnButtonState extends State<ReturnButton>
         builder: (_, __) {
           return AnimatedContainer(
             duration: const Duration(milliseconds: 300),
-            padding: EdgeInsets.symmetric(
-              horizontal: widget.hasText ? 18 : 0,
+            padding: EdgeInsets.fromLTRB(
+              0, 
+              0, 
+              widget.hasText ? 18 : 0, 
+              0
             ),
             height: 52,
             decoration: BoxDecoration(
@@ -73,10 +76,9 @@ class _ReturnButtonState extends State<ReturnButton>
                   ),
                 ),
 
-                // Optional text
                 if (widget.hasText)
                   const Padding(
-                    padding: EdgeInsets.only(left: 6),
+                    padding: EdgeInsets.only(left: 0),
                     child: Text(
                       'Back',
                       style: TextStyle(

@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/assets/vpn-server/virtual_private_network_server_list.dart';
-import 'package:flutter_app/classes/application/application_state.dart';
-import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/button_style.dart';
-import 'package:flutter_app/operators/route_operator.dart';
-import 'package:flutter_app/screens/locations/locations_screen.dart';
-import 'package:flutter_app/elements/button_content/double_text_button_content.dart';
-import 'package:flutter_app/elements/button_content/text_button_content.dart';
-import 'package:flutter_app/elements/buttons/main_buttons/button.dart';
-import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/accent_button_style.dart';
-import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/normal_button_style.dart';
-import 'package:flutter_app/widgets/header/header.dart';
+import 'package:weltraum/assets/vpn-server/virtual_private_network_server_list.dart';
+import 'package:weltraum/classes/application/application_state.dart';
+import 'package:weltraum/elements/buttons/main_buttons/main_button_styles/button_style.dart';
+import 'package:weltraum/operators/route_operator.dart';
+import 'package:weltraum/operators/virtual_private_network_operator.dart';
+import 'package:weltraum/screens/locations/locations_screen.dart';
+import 'package:weltraum/elements/button_content/double_text_button_content.dart';
+import 'package:weltraum/elements/button_content/text_button_content.dart';
+import 'package:weltraum/elements/buttons/main_buttons/button.dart';
+import 'package:weltraum/elements/buttons/main_buttons/main_button_styles/accent_button_style.dart';
+import 'package:weltraum/widgets/header/header.dart';
 import 'package:provider/provider.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -35,6 +35,8 @@ class _HomeScreenState extends State<HomeScreen> {
       state.setServer(servers.values.first);
     }
 
+    VirtualPrivateNetworkOperator operator = VirtualPrivateNetworkOperator(state);
+
     return Scaffold(
       body: Container(
         width: double.infinity,
@@ -48,7 +50,7 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
         ),
-        padding: const EdgeInsets.symmetric(horizontal: 24),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
@@ -62,11 +64,11 @@ class _HomeScreenState extends State<HomeScreen> {
             MainButton(
               onPressed: () {
                 if (state.connection.isConnected) {
-                  // vpnOperator.disconnect();
-                  state.connection.changeState();
+                  operator.disconnect();
+                  // state.connection.changeState();
                 } else {
-                  // vpnOperator.connect();
-                  state.connection.changeState();
+                  operator.connect();
+                  // state.connection.changeState();
                 }
               },
               buttonStyle: AccentButtonStyle(), 
@@ -91,7 +93,7 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             ),
             
-            const SizedBox(height: 20),
+            const SizedBox(height: 16.0),
           ],
         ),
       ),

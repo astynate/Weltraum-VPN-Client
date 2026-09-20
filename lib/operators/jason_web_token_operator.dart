@@ -1,7 +1,5 @@
 import 'dart:async';
-import 'package:flutter_app/api/account_api.dart';
-import 'package:flutter_app/classes/account/account.dart';
-import 'package:flutter_app/classes/application/application_state.dart';
+import 'package:weltraum/classes/application/application_state.dart';
 
 class JasonWebTokenOperator {
   Future<bool> setUpUser(ApplicationState state) async {

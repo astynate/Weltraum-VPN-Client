@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/elements/button_content/button_content.dart';
-import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/button_style.dart';
+import 'package:weltraum/elements/button_content/button_content.dart';
+import 'package:weltraum/elements/buttons/main_buttons/main_button_styles/button_style.dart';
 
 class DoubleTextButtonContent extends ButtonContent {
   final String label;
@@ -10,16 +10,12 @@ class DoubleTextButtonContent extends ButtonContent {
     super.key,
     required this.label,
     required this.text,
-    required AbstractButtonStyle style,
-    Widget? before,
-    Widget? after,
-    icon
+    required super.style,
+    super.before,
+    super.after,
+    super.icon
   }) : super(
-          before: before,
-          after: after,
-          leading: _buildLeading(label, text, style),
-          style: style,
-          icon: icon
+          leading: _buildLeading(label, text, style)
         );
 
   static Widget _buildLeading(

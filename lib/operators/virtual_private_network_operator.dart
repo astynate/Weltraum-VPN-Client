@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/classes/application/application_state.dart';
+import 'package:weltraum/classes/application/application_state.dart';
 import 'package:wireguard_flutter_plus/wireguard_flutter_plus.dart';
 
 class VirtualPrivateNetworkOperator extends ChangeNotifier {
@@ -26,21 +26,15 @@ class VirtualPrivateNetworkOperator extends ChangeNotifier {
   }
 
   Future<void> connect() async {
-    // state.connection.status = "Connecting";
+    if (state.connection.server == null) {
+      return;
+    }
 
-    VirtualPrivateNetworkOperator.serverAddress = "169.58.134.146:51820";
-    VirtualPrivateNetworkOperator.wgQuickConfig = """
-      [Interface]
-      PrivateKey = kO/J+fzC56fw7YzrH9upVuc7RszBENGu9U99DPALs0E=
-      Address = 10.0.0.2/32
-      DNS = 8.8.8.8, 8.8.4.4
+    state.connection.status = "Connecting";
+    notifyListeners();
 
-      [Peer]
-      PublicKey = s/FexR9aa5uDPg4zYVc+JdzC5LdyevE/RI7hlQkT7RM=
-      AllowedIPs = 0.0.0.0/0
-      Endpoint = 169.58.134.146:51820
-      PersistentKeepalive = 25
-    """;
+    VirtualPrivateNetworkOperator.serverAddress = state.connection.server!.serverAddress;
+    VirtualPrivateNetworkOperator.wgQuickConfig = state.connection.server!.configuration;
 
     VirtualPrivateNetworkOperator.providerBundleIdentifier = "com.example.app.WGExtension";
 
@@ -50,16 +44,20 @@ class VirtualPrivateNetworkOperator extends ChangeNotifier {
       providerBundleIdentifier: VirtualPrivateNetworkOperator.providerBundleIdentifier
     );
 
-    // state.connection.status = "Connected";
+    state.connection.changeState(); 
+    state.connection.status = "Connected";
+
+    notifyListeners();
   }
 
   Future<void> disconnect() async {
-    // state.connection.status = "Disconnecting";
-    // notifyListeners();
+    state.connection.status = "Disconnecting";
+    notifyListeners();
 
     await vpn.stopVpn();
 
-    // state.connection.status = "Disconnected";
-    // notifyListeners();
+    state.connection.status = "Disconnected";
+    state.connection.changeState(); 
+    notifyListeners();
   }
 }

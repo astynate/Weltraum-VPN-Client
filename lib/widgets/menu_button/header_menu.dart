@@ -1,7 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter_app/widgets/header/header.dart';
-import 'package:flutter_app/widgets/menu_button/menu_controller.dart';
+import 'package:weltraum/widgets/header/header.dart';
+import 'package:weltraum/widgets/menu_button/menu_controller.dart';
 
 class HeaderMenu extends StatelessWidget {
   final HeaderMenuController controller;

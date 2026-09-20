@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/elements/button_content/button_content.dart';
-import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/button_style.dart';
+import 'package:weltraum/elements/button_content/button_content.dart';
+import 'package:weltraum/elements/buttons/main_buttons/main_button_styles/button_style.dart';
 
 class MainButton extends StatefulWidget {
   final VoidCallback onPressed;
@@ -33,10 +33,15 @@ class _MainButtonState extends State<MainButton> {
         child: Material(
           color: _pressed
               ? widget.buttonStyle.background.withValues(
-                alpha: widget.buttonStyle.background.a * 0.85
-              )
+                  alpha: widget.buttonStyle.background.a * 0.85,
+                )
               : widget.buttonStyle.background,
-          borderRadius: widget.buttonStyle.borderRadius,
+
+          shape: RoundedRectangleBorder(
+            borderRadius: widget.buttonStyle.borderRadius,
+            side: widget.buttonStyle.border ?? BorderSide.none,
+          ),
+
           child: InkWell(
             borderRadius: widget.buttonStyle.borderRadius,
             splashColor: Colors.white.withValues(alpha: 0.15),

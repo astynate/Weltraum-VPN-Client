@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/theme/abstract_theme.dart';
+import 'package:weltraum/theme/abstract_theme.dart';
 
 class PurpulTheme extends AbstractTheme {
     // -- TO WRITE --
@@ -29,8 +29,14 @@ class PurpulTheme extends AbstractTheme {
     Color get primary0Color => const Color.fromARGB(255, 0, 0, 0);
 
     @override
-    Color get backgroundGradientStart => const Color.fromARGB(255, 100, 81, 154);
+    Color get backgroundGradientStart => const Color.fromARGB(255, 104, 73, 191);
     
     @override
-    Color get backgroundGradientEnd => const Color.fromRGBO(22, 10, 56, 1);
+    Color get backgroundGradientEnd => Color.fromARGB(255, 8, 1, 29);
+
+    // @override
+    // Color get backgroundGradientStart => const Color.fromARGB(255, 100, 81, 154);
+    
+    // @override
+    // Color get backgroundGradientEnd => const Color.fromRGBO(22, 10, 56, 1);
 }

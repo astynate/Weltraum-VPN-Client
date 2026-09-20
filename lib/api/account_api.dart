@@ -1,6 +1,6 @@
 import 'dart:convert';
-import 'package:flutter_app/classes/account/account.dart';
-import 'package:flutter_app/classes/application/application_configuration.dart';
+import 'package:weltraum/classes/account/account.dart';
+import 'package:weltraum/classes/application/application_configuration.dart';
 import 'package:http/http.dart' as http;
 
 class AccountAPI {

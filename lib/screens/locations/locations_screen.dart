@@ -1,13 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_app/assets/vpn-server/virtual_private_network_server_list.dart';
-import 'package:flutter_app/assets/vpn-server/virtual_private_netwrok_server.dart';
-import 'package:flutter_app/classes/application/application_state.dart';
-import 'package:flutter_app/elements/button_content/double_text_button_content.dart';
-import 'package:flutter_app/elements/buttons/main_buttons/button.dart';
-import 'package:flutter_app/elements/buttons/main_buttons/main_button_styles/button_style.dart';
-import 'package:flutter_app/elements/buttons/return_button/return_button.dart';
-import 'package:flutter_app/widgets/menu_button/menu_button.dart';
-import 'package:flutter_app/widgets/menu_button/menu_controller.dart';
+import 'package:weltraum/assets/vpn-server/virtual_private_network_server_list.dart';
+import 'package:weltraum/assets/vpn-server/virtual_private_netwrok_server.dart';
+import 'package:weltraum/classes/application/application_state.dart';
+import 'package:weltraum/elements/button_content/double_text_button_content.dart';
+import 'package:weltraum/elements/buttons/main_buttons/button.dart';
+import 'package:weltraum/elements/buttons/main_buttons/main_button_styles/button_style.dart';
+import 'package:weltraum/elements/buttons/return_button/return_button.dart';
+import 'package:weltraum/operators/virtual_private_network_operator.dart';
+import 'package:weltraum/widgets/menu_button/menu_button.dart';
+import 'package:weltraum/widgets/menu_button/menu_controller.dart';
 import 'package:provider/provider.dart';
 
 class LocationsScreen extends StatefulWidget {
@@ -32,6 +33,18 @@ class _LocationsScreenState extends State<LocationsScreen>
   void dispose() {
     menuController.dispose();
     super.dispose();
+  }
+
+  Future<void> connectToServer(ApplicationState state, VirtualPrivateNetworkServer server) async {
+    VirtualPrivateNetworkOperator operator = VirtualPrivateNetworkOperator(state);
+    
+    await operator.disconnect();
+
+    state.setServer(server);
+
+    if (context.mounted) {
+      Navigator.of(context).maybePop();
+    }
   }
 
   @override
@@ -123,7 +136,7 @@ class _LocationsScreenState extends State<LocationsScreen>
                               padding: const EdgeInsets.symmetric(horizontal: 24),
                               child: _sectionHeader(
                                 title: 'Free',
-                                speedLabel: '1MB/S',
+                                speedLabel: '250 KB/S',
                               ),
                             ),
                     
@@ -133,8 +146,7 @@ class _LocationsScreenState extends State<LocationsScreen>
                               if (server.type == ServerType.Free) ...[
                                 MainButton(
                                   onPressed: () {
-                                    state.setServer(server);
-                                    Navigator.of(context).maybePop();
+                                    connectToServer(state, server);
                                   },
                                   buttonStyle: LocationButtonStyle(),
                                   buttonContent: DoubleTextButtonContent(
@@ -153,7 +165,7 @@ class _LocationsScreenState extends State<LocationsScreen>
                                 padding: const EdgeInsets.symmetric(horizontal: 24),
                                 child: _sectionHeader(
                                   title: 'Premium',
-                                  speedLabel: '250 MB/S',
+                                  speedLabel: '5 MB/S',
                                 ),
                               ),
                       
@@ -163,8 +175,7 @@ class _LocationsScreenState extends State<LocationsScreen>
                                 if (server.type == ServerType.Premium) ...[
                                   MainButton(
                                     onPressed: () {
-                                      state.setServer(server);
-                                      Navigator.of(context).maybePop();
+                                      connectToServer(state, server);
                                     },
                                     buttonStyle: LocationButtonStyle(),
                                     buttonContent: DoubleTextButtonContent(

@@ -1,5 +1,5 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_app/assets/vpn-server/virtual_private_netwrok_server.dart';
+import 'package:weltraum/assets/vpn-server/virtual_private_netwrok_server.dart';
 
 class Connection extends ChangeNotifier {
   bool isConnected = false;
