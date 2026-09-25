@@ -44,7 +44,7 @@ class VirtualPrivateNetworkOperator extends ChangeNotifier {
       providerBundleIdentifier: VirtualPrivateNetworkOperator.providerBundleIdentifier
     );
 
-    state.connection.changeState(); 
+    state.changeConnectionState(true);
     state.connection.status = "Connected";
 
     notifyListeners();
@@ -57,7 +57,7 @@ class VirtualPrivateNetworkOperator extends ChangeNotifier {
     await vpn.stopVpn();
 
     state.connection.status = "Disconnected";
-    state.connection.changeState(); 
+    state.changeConnectionState(false); 
     notifyListeners();
   }
 }

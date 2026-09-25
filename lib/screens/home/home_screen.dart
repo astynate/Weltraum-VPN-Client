@@ -40,13 +40,15 @@ class _HomeScreenState extends State<HomeScreen> {
     return Scaffold(
       body: Container(
         width: double.infinity,
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
             colors: [
-              Color.fromARGB(255, 104, 73, 191),
-              Color.fromARGB(255, 8, 1, 29),
+              // Color.fromARGB(255, 104, 73, 191),
+              // Color.fromARGB(255, 8, 1, 29),
+              state.theme.backgroundGradientStart,
+              state.theme.backgroundGradientEnd,
             ],
           ),
         ),
@@ -65,10 +67,8 @@ class _HomeScreenState extends State<HomeScreen> {
               onPressed: () {
                 if (state.connection.isConnected) {
                   operator.disconnect();
-                  // state.connection.changeState();
                 } else {
                   operator.connect();
-                  // state.connection.changeState();
                 }
               },
               buttonStyle: AccentButtonStyle(), 

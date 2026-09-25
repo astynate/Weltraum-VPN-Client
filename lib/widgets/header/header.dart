@@ -1,5 +1,7 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:weltraum/operators/route_operator.dart';
+import 'package:weltraum/screens/start/start_screen.dart';
 
 class Header extends StatefulWidget {
   const Header({super.key});
@@ -112,23 +114,28 @@ class HeaderState extends State<Header>
               color: Colors.white.withValues(alpha: .10),
               borderRadius: BorderRadius.circular(25),
             ),
-            child: const Row(
-              children: [
-                Icon(
-                  Icons.star,
-                  color: Colors.white,
-                  size: 22,
-                ),
-                SizedBox(width: 3),
-                Text(
-                  'Weltraum®',
-                  style: TextStyle(
+            child: GestureDetector(
+              onTap: () {
+                RouteOperator.push(context, StartScreen());
+              },
+              child: const Row(
+                children: [
+                  Icon(
+                    Icons.star,
                     color: Colors.white,
-                    fontSize: 22,
-                    fontWeight: FontWeight.w700,
+                    size: 22,
                   ),
-                ),
-              ],
+                  SizedBox(width: 3),
+                  Text(
+                    'Weltraum®',
+                    style: TextStyle(
+                      color: Colors.white,
+                      fontSize: 22,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ],
+              ),
             ),
           ),
 

@@ -1,3 +1,5 @@
+import 'dart:ui';
+
 import 'package:flutter/material.dart';
 import 'package:weltraum/elements/button_content/button_content.dart';
 import 'package:weltraum/elements/buttons/main_buttons/main_button_styles/button_style.dart';
@@ -30,29 +32,46 @@ class _MainButtonState extends State<MainButton> {
         scale: _pressed ? 0.95 : 1.0,
         duration: const Duration(milliseconds: 120),
         curve: Curves.easeOut,
-        child: Material(
-          color: _pressed
-              ? widget.buttonStyle.background.withValues(
-                  alpha: widget.buttonStyle.background.a * 0.85,
-                )
-              : widget.buttonStyle.background,
-
-          shape: RoundedRectangleBorder(
-            borderRadius: widget.buttonStyle.borderRadius,
-            side: widget.buttonStyle.border ?? BorderSide.none,
-          ),
-
-          child: InkWell(
-            borderRadius: widget.buttonStyle.borderRadius,
-            splashColor: Colors.white.withValues(alpha: 0.15),
-            highlightColor: Colors.white.withValues(alpha: 0.08),
-            onTap: widget.onPressed,
-            child: Container(
-              width: double.infinity,
-              padding: const EdgeInsets.symmetric(horizontal: 15),
-              constraints: const BoxConstraints(minHeight: 80),
-              child: widget.buttonContent,
-            ),
+        child: ClipRRect(
+          borderRadius: widget.buttonStyle.borderRadius,
+          child: Stack(
+            children: 
+            [
+              Positioned.fill(
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(
+                    sigmaX: 25,
+                    sigmaY: 0,
+                  ),
+                  child: const SizedBox(),
+                ),
+              ),
+              Material(
+                color: _pressed
+                    ? widget.buttonStyle.background.withValues(
+                        alpha: widget.buttonStyle.background.a * 0.85,
+                      )
+                    : widget.buttonStyle.background,
+              
+                shape: RoundedRectangleBorder(
+                  borderRadius: widget.buttonStyle.borderRadius,
+                  side: widget.buttonStyle.border ?? BorderSide.none,
+                ),
+              
+                child: InkWell(
+                  borderRadius: widget.buttonStyle.borderRadius,
+                  splashColor: Colors.white.withValues(alpha: 0.15),
+                  highlightColor: Colors.white.withValues(alpha: 0.08),
+                  onTap: widget.onPressed,
+                  child: Container(
+                    width: double.infinity,
+                    padding: const EdgeInsets.symmetric(horizontal: 15),
+                    constraints: const BoxConstraints(minHeight: 80),
+                    child: widget.buttonContent,
+                  ),
+                ),
+              ),
+            ]
           ),
         ),
       ),

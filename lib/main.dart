@@ -1,23 +1,21 @@
 import 'package:flutter/material.dart';
-import 'package:weltraum/operators/jason_web_token_operator.dart';
 import 'package:weltraum/screens/authorization/login_screen.dart';
 import 'package:weltraum/screens/start/start_screen.dart';
 import 'screens/home/home_screen.dart';
 import 'classes/application/application_state.dart';
 import 'package:provider/provider.dart';
 
-// TO USE STATE
-// final state = context.read<ApplicationState>();
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
   final state = ApplicationState();
-  final jwtOperator = JasonWebTokenOperator();
-  final bool loggedIn = await jwtOperator.setUpUser(state);
 
-  print(state.account);
-  print(state.accessToken);
-  print(state.refreshToken);
+  // final jwtOperator = JasonWebTokenOperator();
+  // final bool loggedIn = await jwtOperator.setUpUser(state);
+
+  // print(state.account);
+  // print(state.accessToken);
+  // print(state.refreshToken);
 
   runApp(
     ChangeNotifierProvider<ApplicationState>.value(
