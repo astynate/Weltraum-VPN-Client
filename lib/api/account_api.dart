@@ -33,11 +33,7 @@ class AccountAPI {
 
   static Future<String?> createAnAccount(String fullname, String email, String? avatarPath, String? password) async {
       final uri = Uri.parse("${ApplicationConfiguration().url}/api/accounts");
-
-      print(uri);
-
       final request = http.MultipartRequest("POST", uri);
-      print(request);
 
       request.fields["fullname"] = fullname;
       request.fields["email"] = email;
@@ -74,5 +70,22 @@ class AccountAPI {
     }
 
     return null;
+  }
+
+  static Future<(Account? account, bool result, String? error)> authorizeWithExternalID(String id, String type) async {
+    final uri = Uri.parse("${ApplicationConfiguration().url}/api/accounts");
+    final request = http.MultipartRequest("POST", uri);
+    
+    request.fields["id"] = id;
+    request.fields["type"] = type;
+
+    final streamed = await request.send();
+    final response = await http.Response.fromStream(streamed);
+
+    if (response.statusCode == 200) {
+      return (jsonDecode(response.body) as Account, true, null);
+    }
+
+    return (null, false, response.body);
   }
 }
