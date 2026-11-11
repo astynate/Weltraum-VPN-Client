@@ -42,12 +42,10 @@ class _RegisterPageState extends State<RegisterPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  // Back button
                   _buildBackButton(),
 
                   const SizedBox(height: 28),
 
-                  // Title
                   const Text(
                     'Weltraum VPN',
                     style: TextStyle(
@@ -71,7 +69,6 @@ class _RegisterPageState extends State<RegisterPage> {
 
                   const SizedBox(height: 36),
 
-                  // Full name
                   _buildLabel('Full name'),
                   const SizedBox(height: 7),
                   _buildTextField(
@@ -183,7 +180,7 @@ class _RegisterPageState extends State<RegisterPage> {
         width: 40,
         height: 40,
         decoration: BoxDecoration(
-          color: const Color(0xFF66528F).withOpacity(0.72),
+          color: const Color(0xFF66528F).withValues(alpha: 0.72),
           shape: BoxShape.circle,
         ),
         child: const Center(

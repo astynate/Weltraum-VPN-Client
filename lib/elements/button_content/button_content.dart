@@ -8,6 +8,7 @@ class ButtonContent extends StatelessWidget {
   final Widget? after;
   final AbstractButtonStyle style;
   final bool isCenter;
+  final bool hasBorder;
 
   final dynamic icon;
 
@@ -17,6 +18,7 @@ class ButtonContent extends StatelessWidget {
     this.after,
     this.icon,
     this.isCenter = false,
+    this.hasBorder = false,
     required this.leading,
     required this.style,
   });
@@ -43,13 +45,13 @@ class ButtonContent extends StatelessWidget {
     return Container(
       width: 52,
       height: 52,
-      decoration: BoxDecoration(
+      decoration: hasBorder ? BoxDecoration(
         shape: BoxShape.circle,
         border: Border.all(
           color: Colors.white.withValues(alpha: 0.15),
           width: 3,
         ),
-      ),
+      ) : null,
       child: ClipOval(
         child: _resolveIcon(),
       ),
@@ -69,7 +71,7 @@ class ButtonContent extends StatelessWidget {
       return Icon(
         icon,
         size: 40,
-        color: style.accent,
+        color: style.foreground,
       );
     }
 

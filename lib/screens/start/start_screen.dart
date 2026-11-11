@@ -10,101 +10,96 @@ import 'package:weltraum/screens/home/home_screen.dart';
 import 'package:weltraum/widgets/header/header.dart';
 import 'package:provider/provider.dart';
 
+import '../../widgets/map/server_map.dart';
+
 class StartScreen extends StatelessWidget {
   const StartScreen({super.key});
 
-  @override
-  Widget build(BuildContext context) {
-    final state = context.watch<ApplicationState>();
+  
+@override
+Widget build(BuildContext context) {
+  final state = context.watch<ApplicationState>();
 
   return Scaffold(
-    body: SizedBox.expand(
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          gradient: LinearGradient(
-            colors: [
-              state.theme.backgroundGradientStart,
-              state.theme.backgroundGradientEnd,
-            ],
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            stops: [
-              0.0,
-              0.5,
+    body: Stack(
+      children: [
+        Positioned.fill(
+          child: DecoratedBox(
+            decoration: BoxDecoration(
+              gradient: LinearGradient(
+                colors: [
+                  state.theme.backgroundGradientStart,
+                  state.theme.backgroundGradientEnd,
+                ],
+                begin: Alignment.topCenter,
+                end: Alignment.bottomCenter,
+                stops: const [0.0, 0.5],
+              ),
+            ),
+          ),
+        ),
+
+        const Positioned.fill(
+          child: ServerMap(),
+        ),
+
+        SafeArea(
+          child: Column(
+            children: [
+              const Header(),
+              const SizedBox(height: 60),
+              const Center(child: Text("Weltraum VPN", style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold))),
+              const Center(child: Text("Fast. Safe. Secure.", style: TextStyle(fontSize: 24, color: Color.fromRGBO(255, 255, 255, 0.5)))),
+              const SizedBox(height: 40),
+              const Spacer(),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: MainButton(
+                  onPressed: () {
+                    RouteOperator.push(
+                      context,
+                      const LoginScreen(),
+                    );
+                  },
+                  buttonStyle: AccentButtonStyle(),
+                  buttonContent: DoubleTextButtonContent(
+                    label: 'Continue with your Account',
+                    text: 'Create or log into your account to buy a Premium',
+                    style: AccentButtonStyle(),
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 5),
+
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: MainButton(
+                  onPressed: () {
+                    RouteOperator.push(
+                      context,
+                      const HomeScreen(),
+                    );
+                  },
+                  buttonStyle: secondaryButtonStyle,
+                  buttonContent: DoubleTextButtonContent(
+                    label: 'Continue without Login',
+                    text: 'Start using VPN for free',
+                    style: secondaryButtonStyle,
+                  ),
+                ),
+              ),
+
+              const SizedBox(height: 15),
             ],
           ),
         ),
-        child: SafeArea(
-                  child: Column(
-                    children: [
-                      const Header(),
-                      Expanded(
-                        child: Column(
-                          children: [
-                            const SizedBox(height: 110),
-                            const Text(
-                              "Weltraum VPN",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 42,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
-                            const Text(
-                              "Fast. Safe. Secure.",
-                              style: TextStyle(
-                                color: Color.fromRGBO(255, 255, 255, 0.5),
-                                fontSize: 24,
-                                fontWeight: FontWeight.w500,
-                              ),
-                            ),
-                            
-                            const Spacer(),
-
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: MainButton(
-                                onPressed: () => {
-                                  RouteOperator.push(context, const LoginScreen())
-                                }, 
-                                buttonStyle: AccentButtonStyle(), 
-                                buttonContent: DoubleTextButtonContent(
-                                    label: 'Continue with your Account', 
-                                    text: 'Create or log into your account to buy a Premium', 
-                                  style: AccentButtonStyle(),
-                                )
-                              ),
-                            ),
-
-                            const SizedBox(height: 5),
-
-                            Padding(
-                              padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                              child: 
-                                MainButton(
-                                  onPressed: () => {
-                                    RouteOperator.push(context, const HomeScreen())
-                                  }, 
-                                  buttonStyle: secondaryButtonStyle, 
-                                  buttonContent: DoubleTextButtonContent(
-                                    label: 'Continue without Login', 
-                                    text: 'Start using VPN for free', 
-                                    style: secondaryButtonStyle
-                                  )
-                              ),
-                            ),
-
-                            const SizedBox(height: 15),
-                          ]
-                        ),
-                      ),
-                    ],
-                  ),
-        ),
-      ),
+      ],
     ),
   );
-  }
+}
+
 }
 
 class BottomButtonStyle extends AbstractButtonStyle {

@@ -20,6 +20,22 @@ class ApplicationState extends ChangeNotifier {
     notifyListeners();
   }
 
+  void login(Account inputAccount, String inputAccessToken, String inputRefreshToken) {
+    account = inputAccount;
+    accessToken = inputAccessToken;
+    refreshToken = inputRefreshToken;
+    
+    notifyListeners();
+  }
+
+  void logout() {
+    account = null;
+    accessToken = null;
+    refreshToken = null;
+    
+    notifyListeners();
+  }
+
   void changeConnectionState(bool connectionState) {
     connection.isConnected = connectionState;
     notifyListeners();

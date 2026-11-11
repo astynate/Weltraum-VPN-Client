@@ -43,7 +43,7 @@ final Map<String, VirtualPrivateNetworkServer> servers = {
     // ),
     "USA_Saint_Louis": VirtualPrivateNetworkServer(
     serverAddress: "62.146.183.147:51820",
-    flag: "lib/assets/icons/flags/united_states_of_america.svg",
+    flag: "lib/assets/icons/flags/usa.svg",
     city: "Saint Louis",
     country: "USA",
     configuration: """

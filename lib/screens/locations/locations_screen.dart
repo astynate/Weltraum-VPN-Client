@@ -18,9 +18,7 @@ class LocationsScreen extends StatefulWidget {
   State<LocationsScreen> createState() => _LocationsScreenState();
 }
 
-class _LocationsScreenState extends State<LocationsScreen>
-    with SingleTickerProviderStateMixin {
-
+class _LocationsScreenState extends State<LocationsScreen> with SingleTickerProviderStateMixin {
   late final HeaderMenuController menuController;
 
   @override
@@ -53,14 +51,18 @@ class _LocationsScreenState extends State<LocationsScreen>
 
     return Scaffold(
       body: Container(
-        decoration: const BoxDecoration(
+        decoration: BoxDecoration(
           gradient: LinearGradient(
             colors: [
-              Color.fromARGB(255, 104, 73, 191),
-              Color.fromARGB(255, 8, 1, 29),
+              state.theme.backgroundGradientStart,
+              state.theme.backgroundGradientEnd,
             ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
+            stops: [
+              0.0,
+              0.5,
+            ],
           ),
         ),
         child: SafeArea(
@@ -154,6 +156,7 @@ class _LocationsScreenState extends State<LocationsScreen>
                                     text: server.type.name,
                                     icon: server.flag,
                                     style: LocationButtonStyle(),
+                                    hasBorder: true
                                   ),
                                 ),
                                 const SizedBox(height: 3),
@@ -183,6 +186,7 @@ class _LocationsScreenState extends State<LocationsScreen>
                                       text: server.type.name,
                                       icon: server.flag,
                                       style: LocationButtonStyle(),
+                                      hasBorder: true
                                     ),
                                   ),
                                   const SizedBox(height: 3),

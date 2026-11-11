@@ -1,19 +1,25 @@
 import 'dart:ui';
+import 'package:provider/provider.dart';
 import 'package:flutter/material.dart';
+import 'package:weltraum/classes/application/application_state.dart';
 import 'package:weltraum/operators/route_operator.dart';
+import 'package:weltraum/screens/authorization/login_screen.dart';
+import 'package:weltraum/screens/profile/profile.dart';
 import 'package:weltraum/screens/start/start_screen.dart';
 
 class Header extends StatefulWidget {
-  const Header({super.key});
+  final String? text;
+  final bool isHasIcon;
+  final bool isHasPaddings;
+
+  const Header({super.key, this.text, this.isHasIcon = true, this.isHasPaddings = true});
 
   @override
   State<Header> createState() => HeaderState();
 }
 
-class HeaderState extends State<Header>
-    with SingleTickerProviderStateMixin {
+class HeaderState extends State<Header> with SingleTickerProviderStateMixin {
   late AnimationController _controller;
-
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
 
@@ -70,16 +76,16 @@ class HeaderState extends State<Header>
     _controller.forward();
   }
 
-  void closeMenu() {
-    _controller.reverse().then((_) {
-      if (!mounted) return;
+  Future<void> closeMenu() async {
+    await _controller.reverse();
 
-      _overlayEntry?.remove();
-      _overlayEntry = null;
+    if (!mounted) return;
 
-      setState(() {
-        menuOpen = false;
-      });
+    _overlayEntry?.remove();
+    _overlayEntry = null;
+
+    setState(() {
+      menuOpen = false;
     });
   }
 
@@ -103,7 +109,7 @@ class HeaderState extends State<Header>
 
   Widget _buildHeader() {
     return Padding(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
+      padding: widget.isHasPaddings == false ? const EdgeInsets.fromLTRB(0, 0, 0, 0): const EdgeInsets.fromLTRB(16, 14, 16, 0),
       child: Row(
         children: [
           AnimatedContainer(
@@ -118,17 +124,19 @@ class HeaderState extends State<Header>
               onTap: () {
                 RouteOperator.push(context, StartScreen());
               },
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(
-                    Icons.star,
-                    color: Colors.white,
-                    size: 22,
-                  ),
-                  SizedBox(width: 3),
+                  if (widget.isHasIcon) ...[
+                    const Icon(
+                      Icons.star,
+                      color: Colors.white,
+                      size: 22,
+                    ),
+                    const SizedBox(width: 3),
+                  ],
                   Text(
-                    'Weltraum®',
-                    style: TextStyle(
+                    widget.text ?? 'Weltraum®',
+                    style: const TextStyle(
                       color: Colors.white,
                       fontSize: 22,
                       fontWeight: FontWeight.w700,
@@ -176,6 +184,8 @@ class HeaderState extends State<Header>
   }
 
   Widget _buildMenuOverlay() {
+    final state = context.read<ApplicationState>();
+
     return Positioned.fill(
       child: Material(
         color: Colors.transparent,
@@ -208,20 +218,45 @@ class HeaderState extends State<Header>
                     Expanded(
                       child: ListView.builder(
                         physics: const NeverScrollableScrollPhysics(),
-                        itemCount: 6,
+                        itemCount: 3,
                         itemBuilder: (context, index) {
-                          const items = [
-                            'Profile',
-                            'Settings',
-                            'Language',
-                            'Theme',
-                            'Switch',
-                            'Logout',
-                          ];
+                          final items = [
+                          (
+                            text: 'Profile',
+                            onTap: () async {
+                              await closeMenu();
+                              
+                              if (!mounted) return;
+
+                              if (state.account == null) {
+                                await RouteOperator.push(this.context, LoginScreen());
+                                return;
+                              }
+
+                              if (!mounted) return;
+
+                              await RouteOperator.push(this.context, ProfileScreen()); 
+                            },
+                          ),
+                          (
+                            text: 'Settings',
+                            onTap: () {
+
+                            },
+                          ),
+                          (
+                            text: 'Language',
+                            onTap: () {
+
+                            },
+                          ),
+                        ];
           
                           return _animatedMenuItem(
-                            text: items[index],
+                            text: items[index].text,
                             index: index,
+                            state: state,
+                            onTap: items[index].onTap,
                           );
                         },
                       ),
@@ -301,6 +336,8 @@ class HeaderState extends State<Header>
   Widget _animatedMenuItem({
     required String text,
     required int index,
+    required ApplicationState state,
+    required VoidCallback onTap,
   }) {
     final start = (index * .08).clamp(0.0, .6);
     final end = (start + .45).clamp(0.0, 1.0);
@@ -333,18 +370,16 @@ class HeaderState extends State<Header>
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8),
-        child: _menuButton(text),
+        child: _menuButton(text, state, onTap),
       ),
     );
   }
 
-  Widget _menuButton(String text) {
+  Widget _menuButton(String text, state, VoidCallback onTap,) {
     return PressableScale(
       scale: 0.96,
       borderRadius: BorderRadius.circular(28),
-      onTap: () {
-        debugPrint('$text clicked');
-      },
+      onTap: onTap,
       child: Container(
         height: 60,
         decoration: BoxDecoration(
@@ -442,7 +477,6 @@ class _PressableScaleState extends State<PressableScale> {
             splashColor: Colors.white.withValues(alpha: .16),
             highlightColor: Colors.white.withValues(alpha: .07),
             onTap: widget.onTap,
-
             child: widget.child,
           ),
         ),

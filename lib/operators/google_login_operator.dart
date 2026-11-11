@@ -1,5 +1,7 @@
 import 'dart:async';
 // import 'package:google_sign_in/google_sign_in.dart';
+import 'package:weltraum/api/account_api.dart';
+import 'package:weltraum/classes/account/account.dart';
 import 'package:weltraum/classes/application/application_state.dart';
 import 'package:google_sign_in_all_platforms/google_sign_in_all_platforms.dart';
 
@@ -23,18 +25,25 @@ class GoogleLoginOperator {
 
   Future<bool> handleGoogleLogin() async {
     try {
+      await instance.signOut();
+
       final credentials = await instance.signIn();
 
       if (credentials == null) {
         return false;
       }
 
-      print('credentials: $credentials');
-      print('accessToken: ${credentials?.accessToken}');
-      print('idToken: ${credentials?.idToken}');
-      print('refreshToken: ${credentials?.refreshToken}');
+      if (credentials.idToken != null) {
+        var loginResult = await AccountAPI.authorizeWithExternalID(credentials.idToken ?? "", "google");
 
-      // credentials.
+        if (loginResult.$1 != null) {
+          state.login(
+            loginResult.$1 as Account, 
+            loginResult.$2 as String, 
+            loginResult.$3 as String
+          );
+        }
+      }
 
       return true;
     } catch (e) {

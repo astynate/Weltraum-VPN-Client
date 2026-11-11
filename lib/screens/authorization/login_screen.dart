@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:weltraum/classes/application/application_state.dart';
@@ -13,7 +12,9 @@ import 'package:provider/provider.dart';
 import 'package:weltraum/operators/facebook_login_operator.dart';
 import 'package:weltraum/operators/google_login_operator.dart';
 import 'package:weltraum/operators/microsoft_login_operator.dart';
-import 'package:weltraum/operators/twitter_login_operator.dart';
+import 'package:weltraum/operators/route_operator.dart';
+import 'package:weltraum/screens/home/home_screen.dart';
+import 'package:weltraum/screens/profile/profile.dart';
 
 class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
@@ -27,27 +28,22 @@ class LoginScreen extends StatelessWidget {
         width: double.infinity,
         decoration: BoxDecoration(
           gradient: LinearGradient(
-            // colors: [state.theme.backgroundGradientStart, state.theme.backgroundGradientEnd,],
-            colors: [Color(0xFF64509A), Color(0xFF150937)],
+            colors: [
+              state.theme.backgroundGradientStart,
+              state.theme.backgroundGradientEnd,
+            ],
             begin: Alignment.topCenter,
             end: Alignment.bottomCenter,
-            stops: [0.0, 0.5],
+            stops: [
+              0.0,
+              0.5,
+            ],
           ),
         ),
         // padding: const EdgeInsets.symmetric(horizontal: 24),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // const SizedBox(height: 40),
-            // GestureDetector(
-            //   onTap: () => Navigator.pop(context),
-            //   child: const Row(
-            //     children: [
-            //       Icon(Icons.arrow_back_ios, color: Colors.white),
-            //       Text("Back", style: TextStyle(fontSize: 18)),
-            //     ],
-            //   ),
-            // ),
             Expanded(
               child: Container(
                 width: double.infinity,
@@ -136,11 +132,11 @@ class LoginScreen extends StatelessWidget {
                                               child: MainButton(
                                                 onPressed: () async {
                                                   final state = context.read<ApplicationState>();
+                                                  final result = await GoogleLoginOperator(state).handleGoogleLogin();
 
-                                                  GoogleLoginOperator googleLoginOperator = GoogleLoginOperator(state);
-                                                  print(googleLoginOperator);
-                                                  var result = await googleLoginOperator.handleGoogleLogin();
-                                                  print(result);
+                                                  if (result && context.mounted) {
+                                                    RouteOperator.push(context, HomeScreen());
+                                                  }
                                                 },
                                                 buttonStyle:
                                                     AuthorizationButtonStyle(),
@@ -180,7 +176,6 @@ class LoginScreen extends StatelessWidget {
                                                 onPressed: () async {
                                                   final code = await MicrosoftLoginOperator.login();
 
-                                                  
                                                 },
                                                 buttonStyle:
                                                     AuthorizationButtonStyle(),
@@ -261,7 +256,9 @@ class LoginScreen extends StatelessWidget {
                                       const SizedBox(height: 8.0),
 
                                       MainButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          RouteOperator.push(context, ProfileScreen());
+                                        },
                                         buttonStyle: BottomButtonStyle(),
                                         buttonContent: TextButtonContent(
                                           label: "Create an account",
@@ -432,7 +429,7 @@ class AuthorizationButtonStyle extends AbstractButtonStyle {
   Color get accent => Colors.black;
 
   @override
-  Color get background => const Color.fromRGBO(254, 254, 254, 0.05);
+  Color get background => const Color.fromRGBO(254, 254, 254, 0.15);
 
   @override
   BorderRadius get borderRadius => ApplicationState().theme.borderRadius;

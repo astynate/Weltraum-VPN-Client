@@ -11,11 +11,12 @@ class DoubleTextButtonContent extends ButtonContent {
     required this.label,
     required this.text,
     required super.style,
+    super.hasBorder = false,
     super.before,
     super.after,
     super.icon
   }) : super(
-          leading: _buildLeading(label, text, style)
+          leading: _buildLeading(label, text, style),
         );
 
   static Widget _buildLeading(

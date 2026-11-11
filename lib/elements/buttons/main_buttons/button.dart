@@ -1,5 +1,4 @@
 import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:weltraum/elements/button_content/button_content.dart';
 import 'package:weltraum/elements/buttons/main_buttons/main_button_styles/button_style.dart';
@@ -40,8 +39,8 @@ class _MainButtonState extends State<MainButton> {
               Positioned.fill(
                 child: BackdropFilter(
                   filter: ImageFilter.blur(
-                    sigmaX: 25,
-                    sigmaY: 0,
+                    sigmaX: 30,
+                    sigmaY: 10,
                   ),
                   child: const SizedBox(),
                 ),

@@ -1,5 +1,6 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
+import 'package:weltraum/classes/application/application_state.dart';
 import 'package:weltraum/widgets/header/header.dart';
 import 'package:weltraum/widgets/menu_button/menu_controller.dart';
 
@@ -49,6 +50,7 @@ class HeaderMenu extends StatelessWidget {
                           return _animatedMenuItem(
                             text: items[index],
                             index: index,
+                            context: context
                           );
                         },
                       ),
@@ -122,7 +124,7 @@ class HeaderMenu extends StatelessWidget {
     );
   }
 
-  Widget _animatedMenuItem({required String text, required int index}) {
+  Widget _animatedMenuItem({required String text, required int index, context}) {
     final start = (index * .08).clamp(0.0, .6);
     final end = (start + .45).clamp(0.0, 1.0);
 
@@ -147,16 +149,23 @@ class HeaderMenu extends StatelessWidget {
       },
       child: Padding(
         padding: const EdgeInsets.only(bottom: 8),
-        child: _menuButton(text),
+        child: _menuButton(text, context),
       ),
     );
   }
 
-  Widget _menuButton(String text) {
+  Widget _menuButton(String text, context) {
     return PressableScale(
       scale: 0.96,
       borderRadius: BorderRadius.circular(28),
-      onTap: () => debugPrint('$text clicked'),
+      onTap: () {
+        ApplicationState state = context.read<ApplicationState>();
+
+        if (state.account != null) {
+          print(state.account!.fullName);
+          print(state.account!.email);
+        }
+      },
       child: Container(
         height: 60,
         decoration: BoxDecoration(

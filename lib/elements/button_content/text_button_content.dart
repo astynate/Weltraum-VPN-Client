@@ -9,12 +9,12 @@ class TextButtonContent extends ButtonContent {
     super.key,
     required this.label,
     required super.style,
+    super.isCenter = true,
     super.before,
     super.after,
     super.icon,
   }) : super(
           leading: _buildLeading(label, style),
-          isCenter: true,
         );
 
   static Widget _buildLeading(String label, AbstractButtonStyle style) {
