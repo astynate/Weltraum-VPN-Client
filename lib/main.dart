@@ -1,12 +1,11 @@
-
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_stripe/flutter_stripe.dart';
-
 import 'package:weltraum/classes/application/application_state.dart';
 import 'package:weltraum/classes/application/premium_state.dart';
 import 'package:weltraum/screens/authorization/login_screen.dart';
 import 'package:weltraum/screens/start/start_screen.dart';
+import 'package:window_manager/window_manager.dart';
 import 'screens/home/home_screen.dart';
 
 Future<void> main() async {
@@ -14,6 +13,15 @@ Future<void> main() async {
 
   Stripe.publishableKey = const String.fromEnvironment(
     'STRIPE_PUBLISHABLE_KEY',
+  );
+
+  await windowManager.ensureInitialized();
+
+  const windowOptions = WindowOptions(
+    size: Size(1000, 700),
+    minimumSize: Size(500, 700), 
+    maximumSize: Size(1600, 1200),
+    center: true,
   );
 
   try {
@@ -36,6 +44,11 @@ Future<void> main() async {
     debugPrint('Failed to load subscription: $e');
     debugPrintStack(stackTrace: stackTrace);
   }
+
+  await windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
 
   runApp(
     MultiProvider(

@@ -19,8 +19,7 @@ class ServerMap extends StatefulWidget {
   State<ServerMap> createState() => _ServerMapState();
 }
 
-class _ServerMapState extends State<ServerMap>
-    with SingleTickerProviderStateMixin {
+class _ServerMapState extends State<ServerMap> with SingleTickerProviderStateMixin {
   late final AnimationController anim;
 
   Matrix4 fromMatrix = Matrix4.identity();
@@ -38,8 +37,9 @@ class _ServerMapState extends State<ServerMap>
   static const double imageHeight = 2850;
 
   static const regions = [
-    Region('Europe', 0.5165, 0.4567, 0.30, 0.30),
-    Region('America', 0.25, 0.50, 0.45, 0.45),
+    Region('Europe', 0.505, 0.4567, 0.30, 0.30),
+    Region('America', 0.225, 0.525, 0.35, 0.35),
+    Region('Asia', 0.70, 0.50, 0.25, 0.25),
   ];
 
   final servers = [
@@ -93,28 +93,15 @@ class _ServerMapState extends State<ServerMap>
 
     if (zoom < minZoom) zoom = minZoom;
 
-    // Дополнительное увеличение на узких экранах
-    final double screenFactor = viewSize.width < 600 ? 2.0 : 1.0;
+    final double screenFactor = viewSize.width < 600 ? 2.25 : 1.0;
 
     zoom *= screenFactor;
 
-    double tx = viewSize.width / 2 -
-        zoom * mapSize.width * r.cx +
-        panFrac.dx * viewSize.width;
+    double tx = viewSize.width / 2 - zoom * mapSize.width * r.cx + panFrac.dx * viewSize.width;
+    double ty = viewSize.height / 2 - zoom * mapSize.height * r.cy + panFrac.dy * viewSize.height;
 
-    double ty = viewSize.height / 2 -
-        zoom * mapSize.height * r.cy +
-        panFrac.dy * viewSize.height;
-
-    tx = tx.clamp(
-      viewSize.width - zoom * mapSize.width,
-      0.0,
-    ).toDouble();
-
-    ty = ty.clamp(
-      viewSize.height - zoom * mapSize.height,
-      0.0,
-    ).toDouble();
+    tx = tx.clamp(viewSize.width - zoom * mapSize.width, 0.0,).toDouble();
+    ty = ty.clamp(viewSize.height - zoom * mapSize.height, 0.0,).toDouble();
 
     return Matrix4.identity()
       ..translate(tx, ty)
@@ -265,54 +252,60 @@ class _ServerMapState extends State<ServerMap>
             ),
 
             Positioned(
-              left: 0,
-              right: 0,
-              bottom: 190,
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: List.generate(regions.length, (i) {
-                  final active = i == regionIndex;
+              bottom: constraints.maxWidth < 600 ? 10 : 20,
+              left: constraints.maxWidth < 600 ? 10 : null,
+              right: constraints.maxWidth < 600 ? 10 : 20,
+              child: Container(
+                width: constraints.maxWidth < 600 ? double.infinity : null,
+                padding: const EdgeInsets.all(5),
+                decoration: BoxDecoration(
+                  color: const Color.fromRGBO(255, 255, 255, 0.2),
+                  borderRadius: BorderRadius.circular(30),
+                ),
+                child: Row(
+                  mainAxisSize: constraints.maxWidth < 600
+                      ? MainAxisSize.max
+                      : MainAxisSize.min,
+                  children: List.generate(regions.length, (i) {
+                    final active = i == regionIndex;
 
-                  return Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                    ),
-                    child: GestureDetector(
+                    final button = GestureDetector(
                       onTap: () => _goTo(i),
                       child: AnimatedContainer(
-                        duration: const Duration(
-                          milliseconds: 250,
-                        ),
+                        duration: const Duration(milliseconds: 250),
+                        alignment: Alignment.center,
                         padding: const EdgeInsets.symmetric(
-                          horizontal: 16,
-                          vertical: 8,
+                          horizontal: 21,
+                          vertical: 6,
                         ),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(
-                            alpha: active ? 0.25 : 0.08,
-                          ),
+                          color: active
+                              ? Colors.white
+                              : Colors.transparent,
                           borderRadius: BorderRadius.circular(20),
-                          border: Border.all(
-                            color: Colors.white.withValues(
-                              alpha: active ? 0.8 : 0.2,
-                            ),
-                          ),
                         ),
                         child: Text(
                           regions[i].name,
+                          textAlign: TextAlign.center,
                           style: TextStyle(
-                            color: Colors.white,
+                            color: active ? Colors.black : Colors.white,
                             fontWeight: active
                                 ? FontWeight.bold
                                 : FontWeight.normal,
                           ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                    );
+
+                    return constraints.maxWidth < 600
+                        ? Expanded(child: button)
+                        : button;
+                  }),
+                ),
               ),
             ),
+
+          
           ],
         );
       },
@@ -375,7 +368,7 @@ class _ServerMapState extends State<ServerMap>
           ),
         ),
 
-        const SizedBox(height: 4),
+        const SizedBox(height: 2),
 
         Text(
           name,
